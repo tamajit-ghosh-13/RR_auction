@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+venv/
+
+# Graphify host-specific cache/config
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/

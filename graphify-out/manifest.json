@@ -1,0 +1,62 @@
+{
+  "Round 1 Problem Statement _ SupeRR Selector Season 2.docx.pdf": {
+    "mtime": 1794295836.0,
+    "seen": 1794319263.215959,
+    "ast_hash": "a71b2265ac87085e0c110d56ea453e44",
+    "semantic_hash": "a71b2265ac87085e0c110d56ea453e44"
+  },
+  ".agents/agents/data-engineering-agent.md": {
+    "mtime": 1794323626.643261,
+    "seen": 1794324503.676586,
+    "ast_hash": "841ffc140284781e108db81c718ae580",
+    "semantic_hash": "841ffc140284781e108db81c718ae580"
+  },
+  ".agents/agents/pressure-modeling-agent.md": {
+    "mtime": 1794323630.1470232,
+    "seen": 1794324503.676589,
+    "ast_hash": "d47e23728f47f1d500f30a553d765f38",
+    "semantic_hash": "d47e23728f47f1d500f30a553d765f38"
+  },
+  ".agents/agents/report-and-validation-agent.md": {
+    "mtime": 1794323633.863315,
+    "seen": 1794324503.67659,
+    "ast_hash": "61725adc1c02310647e5ad625b63adfe",
+    "semantic_hash": "61725adc1c02310647e5ad625b63adfe"
+  },
+  ".agents/rules/superr-selector.md": {
+    "mtime": 1794323599.631216,
+    "seen": 1794324503.67659,
+    "ast_hash": "9bbbcba9848f109c9c0535382d6e4005",
+    "semantic_hash": "9bbbcba9848f109c9c0535382d6e4005"
+  },
+  ".agents/skills/superr-selector-pressure-analytics/SKILL.md": {
+    "mtime": 1794323621.903446,
+    "seen": 1794324503.6765912,
+    "ast_hash": "5c343d4ab65ad9860c134ec327922fc7",
+    "semantic_hash": "5c343d4ab65ad9860c134ec327922fc7"
+  },
+  ".agents/workflows/data-engineering-agent.md": {
+    "mtime": 1794323653.3886623,
+    "seen": 1794324503.676592,
+    "ast_hash": "eb9b83ba2dec3b2b60612de10ae3df9c",
+    "semantic_hash": "eb9b83ba2dec3b2b60612de10ae3df9c"
+  },
+  ".agents/workflows/pressure-modeling-agent.md": {
+    "mtime": 1794323669.161763,
+    "seen": 1794324503.676592,
+    "ast_hash": "e7d5494166126bd4de95ed35a4dd7f91",
+    "semantic_hash": "e7d5494166126bd4de95ed35a4dd7f91"
+  },
+  ".agents/workflows/report-and-validation-agent.md": {
+    "mtime": 1794323677.4980807,
+    "seen": 1794324503.6765928,
+    "ast_hash": "37e591904b80d9a038d86ac3e8ebb729",
+    "semantic_hash": "37e591904b80d9a038d86ac3e8ebb729"
+  },
+  "AGENTS.md": {
+    "mtime": 1794323587.0321279,
+    "seen": 1794324503.6765928,
+    "ast_hash": "99b416fbe2f032f6a9083be226a7dfdb",
+    "semantic_hash": "99b416fbe2f032f6a9083be226a7dfdb"
+  }
+}
