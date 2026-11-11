@@ -1,0 +1,61 @@
+striker_id,match_id,comp_name,match_date,match_result,hp_balls,hp_runs,hp_fours,hp_sixes,net_value,mean_bpi,role,player_id,player_name,player_display_name,bowler_id,hp_wickets,mean_bopi
+796.0,17395,Australia in India T20I Series 2022,2022-09-23,India Won by 6 Wickets,19,43,4.0,3.0,34.37454832578227,0.7086423069031804,Batter,796,Matthew Wade,Matthew Wade,,,
+796.0,13616,Sri Lanka in Australia T20I Series 2022,2022-02-20,Sri Lanka Won by 5 wickets,27,43,2.0,2.0,23.601052664154402,0.7524776642589742,Batter,796,Matthew Wade,Matthew Wade,,,
+796.0,17394,Australia in India T20I Series 2022,2022-09-20,Australia Won by 4 Wickets,16,30,3.0,2.0,21.30226654336605,0.76268588118662,Batter,796,Matthew Wade,Matthew Wade,,,
+1699.0,18531,India in New Zealand T20I Series 2022/23,2022-11-20,India won by 65 runs,39,88,10.0,5.0,56.030670861147755,0.6502123209288211,Batter,1699,Suryakumar Yadav,Suryakumar Yadav,,,
+1699.0,14111,IPL 2022,2022-04-09,Royal Challengers Bengaluru won by 7 wickets,37,68,5.0,6.0,39.9902851656545,0.7265142143041232,Batter,1699,Suryakumar Yadav,Suryakumar Yadav,,,
+1699.0,31273,IPL 2024,2024-05-06,Mumbai Indians Won by 7 wickets,26,54,6.0,3.0,37.46992964302792,0.630744435890876,Batter,1699,Suryakumar Yadav,Suryakumar Yadav,,,
+2485.0,17558,England in Pakistan T20I Series 2022,2022-09-30,England Won by 8 Wickets,40,70,6.0,3.0,42.17756758050707,0.7012146476388254,Batter,2485,Babar Azam,Babar Azam,,,
+2485.0,21404,New Zealand in Pakistan T20I Series 2023,2023-04-15,Pakistan Won by 38 runs,28,57,5.0,3.0,31.8489617256787,0.6870046667599022,Batter,2485,Babar Azam,Babar Azam,,,
+2485.0,28964,Pakistan in New Zealand T20I series 2024,2024-01-14,New Zealand Won by 21 Runs,29,43,3.0,2.0,19.23293989823984,0.6797526143877898,Batter,2485,Babar Azam,Babar Azam,,,
+4260.0,20245,IPL 2023,2023-05-18,Royal Challengers Bengaluru Won by 8 wickets,30,71,8.0,4.0,35.784174988121194,0.6396243681343469,Batter,4260,Heinrich Klaasen,Heinrich Klaasen,,,
+4260.0,20220,IPL 2023,2023-04-29,Sunrisers Hyderabad Won by 9 Runs,27,53,2.0,4.0,33.41235363923002,0.6834920472783531,Batter,4260,Heinrich Klaasen,Heinrich Klaasen,,,
+4260.0,40734,IPL 2025,2025-04-23,Mumbai Indians Won by 7 wickets,34,57,7.0,2.0,26.875764276931,0.6699965077215384,Batter,4260,Heinrich Klaasen,Heinrich Klaasen,,,
+4773.0,30341,Sri Lanka in Bangladesh T20I Series 2024,2024-03-04,Sri Lanka won by 3 runs,28,59,4.0,5.0,35.88012252396804,0.7198917965394408,Batter,4773,Jaker Ali Anik,Jaker Ali Anik,,,
+4773.0,38844,Bangladesh in West Indies T20I Series 2024,2024-12-20,Bangladesh Won by 80 runs,41,72,3.0,6.0,26.013695310749647,0.7466108468776899,Batter,4773,Jaker Ali Anik,Jaker Ali Anik,,,
+4773.0,45499,Asia Cup 2025,2025-09-13,Sri Lanka Won by 6 wickets,28,36,2.0,0.0,17.758204528812975,0.6629981920608857,Batter,4773,Jaker Ali Anik,Jaker Ali Anik,,,
+4812.0,30728,Afghanistan v Ireland T20I Series 2024,2024-03-15,Ireland won by 38 runs,31,55,7.0,2.0,32.80716873865071,0.7105160020221661,Batter,4812,Harry Tector,Harry Tector,,,
+4812.0,15795,India in Ireland T20I Series 2022,2022-06-26,India Won by 7 Wickets,17,34,3.0,2.0,25.499474848187116,0.6255857620136657,Batter,4812,Harry Tector,Harry Tector,,,
+4812.0,47241,Ireland in Bangladesh T20I Series 2025,2025-11-27,Ireland Won by 39 runs,29,49,0.0,4.0,24.502820247115192,0.6721345798076842,Batter,4812,Harry Tector,Harry Tector,,,
+6288.0,20250,IPL 2023,2023-05-21,Gujarat Titans Won by 6 wickets,39,78,2.0,7.0,42.981747320525926,0.6865470593466081,Batter,6288,Shubman Gill,Shubman Gill,,,
+6288.0,30072,IPL 2024,2024-04-04,Punjab Kings Won by 3 wickets,27,53,3.0,2.0,26.414839153584552,0.6564342360353784,Batter,6288,Shubman Gill,Shubman Gill,,,
+6288.0,14151,IPL 2022,2022-05-10,Gujarat Titans won by 62 runs,33,49,6.0,0.0,22.395227761864966,0.6746334274008429,Batter,6288,Shubman Gill,Shubman Gill,,,
+6396.0,41507,Australia in West Indies T20I Series 2025,2025-07-25,Australia Won By 6 Wickets,15,49,2.0,6.0,41.25859733821831,0.6635351722642392,Batter,6396,Tim David,Tim David,,,
+6396.0,41969,South Africa in Australia T20I Series 2025,2025-08-10,Australia Won by 17 runs,48,75,4.0,7.0,39.844497803709345,0.695761967242534,Batter,6396,Tim David,Tim David,,,
+6396.0,40727,IPL 2025,2025-04-18,Punjab Kings Won by 5 wickets,16,36,3.0,3.0,32.251874518915194,0.6211978009707044,Batter,6396,Tim David,Tim David,,,
+7260.0,40760,IPL 2025,2025-05-18,Punjab Kings Won by 10 runs,30,53,3.0,4.0,30.050685313536704,0.7481071834322987,Batter,7260,Dhruv Jurel,Dhruv Jurel,,,
+7260.0,31291,IPL 2024,2024-05-24,Sunrisers Hyderabad Won by 36 runs,24,42,4.0,2.0,25.02064486270837,0.7390497635626394,Batter,7260,Dhruv Jurel,Dhruv Jurel,,,
+7260.0,40735,IPL 2025,2025-04-24,Royal Challengers Bengaluru Won by 11 runs,30,46,3.0,3.0,23.369081028549594,0.7016145734649288,Batter,7260,Dhruv Jurel,Dhruv Jurel,,,
+7544.0,20193,IPL 2023,2023-04-09,Kolkata Knight Riders Won By 3 Wickets,33,68,7.0,4.0,33.4865718586547,0.6616364245315102,Batter,7544,Venkatesh Iyer,Venkatesh Iyer,,,
+7544.0,40708,IPL 2025,2025-04-03,Kolkata Knight Riders Won by 80 runs,25,54,6.0,3.0,30.087558986059044,0.6783700695304924,Batter,7544,Venkatesh Iyer,Venkatesh Iyer,,,
+7544.0,50140,IPL 2026,2026-04-10,Rajasthan Royals Won by 6 wickets,15,29,1.0,2.0,24.410852604178995,0.7450074912258421,Batter,7544,Venkatesh Iyer,Venkatesh Iyer,,,
+,50359,IPL 2026,2026-04-26,Kolkata Knight Riders Won by Super over (Match Tied),5,5,,,35.79855855855857,,Bowler,781,Sunil Narine,Sunil Narine,781.0,3.0,0.8672174370551892
+,40741,IPL 2025,2025-04-29,Kolkata Knight Riders Won by 14 runs,7,7,,,33.188340400867425,,Bowler,781,Sunil Narine,Sunil Narine,781.0,3.0,0.6613931889656371
+,20189,IPL 2023,2023-04-06,Kolkata Knight Riders Won By 81 Runs,2,0,,,19.134097421203442,,Bowler,781,Sunil Narine,Sunil Narine,781.0,1.0,0.6136183572048781
+,20240,IPL 2023,2023-05-14,Royal Challengers Bengaluru Won by 112 runs,6,3,,,25.314673580788167,,Bowler,2636,Adam Zampa,Adam Zampa,2636.0,2.0,0.6561766625604827
+,13612,Sri Lanka in Australia T20I Series 2022,2022-02-11,Australia Won by 20 runs (D/L method),5,6,,,22.83158329429748,,Bowler,2636,Adam Zampa,Adam Zampa,2636.0,2.0,0.6399944055381624
+,41508,Australia in West Indies T20I Series 2025,2025-07-26,Australia Won by 3 wickets,2,0,,,21.62254834477382,,Bowler,2636,Adam Zampa,Adam Zampa,2636.0,2.0,0.692905719308261
+,44267,Pakistan in Bangladesh T20I Series 2025,2025-07-24,Pakistan Won by 74 runs,7,6,,,15.972230074005026,,Bowler,2681,Taskin Ahmed,Taskin Ahmed,2681.0,2.0,0.7397979707546402
+,45906,Netherlands in Bangladesh T20I Series 2025,2025-08-30,Bangladesh Won by 8 wickets,7,10,,,15.756960257787325,,Bowler,2681,Taskin Ahmed,Taskin Ahmed,2681.0,2.0,0.620367964004769
+,20135,England in Bangladesh T20I Series 2023,2023-03-14,Bangladesh won by 16 runs,12,13,,,15.358066738098884,,Bowler,2681,Taskin Ahmed,Taskin Ahmed,2681.0,2.0,0.7080777407956708
+,14150,IPL 2022,2022-05-09,Kolkata Knight Riders Won by 52 Runs,13,1,,,48.97611090311223,,Bowler,2933,Jasprit Bumrah,Jasprit Bumrah,2933.0,4.0,0.6834752140482626
+,31243,IPL 2024,2024-04-11,Mumbai Indians Won by 7 wickets,18,17,,,38.21205477451025,,Bowler,2933,Jasprit Bumrah,Jasprit Bumrah,2933.0,4.0,0.6942357767514513
+,30060,IPL 2024,2024-03-24,Gujarat Titans won by 6 runs,16,9,,,25.602300265437655,,Bowler,2933,Jasprit Bumrah,Jasprit Bumrah,2933.0,2.0,0.6851447776502886
+,19961,West Indies in South Africa T20I Series 2023,2023-03-28,West Indies Won by 7 runs,13,11,,,29.351499165832372,,Bowler,3275,Alzarri Joseph,Alzarri Joseph,3275.0,3.0,0.668763785255854
+,20193,IPL 2023,2023-04-09,Kolkata Knight Riders Won By 3 Wickets,12,10,,,23.164090710342563,,Bowler,3275,Alzarri Joseph,Alzarri Joseph,3275.0,2.0,0.6987615238153264
+,20181,IPL 2023,2023-03-31,Gujarat Titans Won by 5 wickets,14,13,,,21.090461026649553,,Bowler,3275,Alzarri Joseph,Alzarri Joseph,3275.0,2.0,0.7088948943874278
+,45513,Asia Cup 2025,2025-09-28,India Won by 5 wickets,24,26,,,39.38227002589114,,Bowler,3644,Kuldeep Yadav,Kuldeep Yadav,3644.0,4.0,0.696789353187396
+,24352,India in West Indies T20I Series 2023,2023-08-08,India Won by 7 Wickets,5,1,,,26.16303735531238,,Bowler,3644,Kuldeep Yadav,Kuldeep Yadav,3644.0,2.0,0.63116020557582
+,43057,IPL 2025,2025-05-24,Delhi Capitals Won by 6 wickets,7,4,,,22.84757559612696,,Bowler,3644,Kuldeep Yadav,Kuldeep Yadav,3644.0,2.0,0.6787945053609573
+,40767,IPL 2025,2025-06-03,Royal Challengers Bengaluru Won by 6 runs,14,7,,,32.44955632061492,,Bowler,4219,Krunal Pandya,Krunal Pandya,4219.0,2.0,0.6542818167489449
+,14105,IPL 2022,2022-04-04,Lucknow Super Giants won by 12 Runs,7,4,,,27.762307474808946,,Bowler,4219,Krunal Pandya,Krunal Pandya,4219.0,2.0,0.6498683049401761
+,40745,IPL 2025,2025-05-03,Royal Challengers Bengaluru Won by 2 runs,3,2,,,17.90114613180516,,Bowler,4219,Krunal Pandya,Krunal Pandya,4219.0,1.0,0.6109923545083799
+,50391,IPL 2026,2026-05-24,Delhi Capitals Won by 40 runs,7,7,,,31.54229414251492,,Bowler,4641,Lungi Ngidi,Lungi Ngidi,4641.0,2.0,0.6152360354772187
+,41851,West Indies in South Africa T20I Series 2026,2026-02-01,West Indies Won by 6 runs(DLS Method),3,0,,,20.925849212924604,,Bowler,4641,Lungi Ngidi,Lungi Ngidi,4641.0,1.0,0.604502215134162
+,16315,South Africa in England T20I Series 2022,2022-07-27,England Won by 41 Runs,11,19,,,19.46785674801417,,Bowler,4641,Lungi Ngidi,Lungi Ngidi,4641.0,3.0,0.6767897085213685
+,47977,Pakistan T20I Tri-Series 2025,2025-11-19,Zimbabwe Won by 67 runs,11,17,,,27.28497227088526,,Bowler,4900,Wanindu Hasaranga,Wanindu Hasaranga,4900.0,3.0,0.6632794822277536
+,40704,IPL 2025,2025-03-30,Rajasthan Royals Won by 6 runs,8,7,,,26.336307606786402,,Bowler,4900,Wanindu Hasaranga,Wanindu Hasaranga,4900.0,2.0,0.6857921301593535
+,45507,Asia Cup 2025,2025-09-20,Bangladesh Won by 4 wickets,23,20,,,25.488390529181032,,Bowler,4900,Wanindu Hasaranga,Wanindu Hasaranga,4900.0,2.0,0.6705565727498461
+,31247,IPL 2024,2024-04-14,Chennai Super Kings Won by 20 runs,6,6,,,27.969706854975406,,Bowler,8661,Matheesha Pathirana,Matheesha Pathirana,8661.0,2.0,0.7044758000448342
+,20229,IPL 2023,2023-05-06,Chennai Super Kings Won by 6 wickets,7,2,,,23.762263189546772,,Bowler,8661,Matheesha Pathirana,Matheesha Pathirana,8661.0,2.0,0.6862588472905937
+,29924,Afghanistan in Sri Lanka T20I Series 2024,2024-02-17,Sri Lanka Won by 4 runs,15,13,,,23.04317625085417,,Bowler,8661,Matheesha Pathirana,Matheesha Pathirana,8661.0,3.0,0.7294018808494951

@@ -10,7 +10,11 @@ __pycache__/
 env/
 venv/
 
-# Graphify host-specific cache/config
+# Graphify host-specific cache/config/backups
 graphify-out/.graphify_python
 graphify-out/.graphify_root
 graphify-out/cache/
+graphify-out/.graphify_build_state.json
+graphify-out/.graphify_labels.pending.json
+graphify-out/*.sig
+graphify-out/2026-*/

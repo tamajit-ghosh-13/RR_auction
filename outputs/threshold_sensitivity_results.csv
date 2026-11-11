@@ -1,0 +1,7 @@
+role,threshold,spearman_rho_vs_baseline,top10_invariance_pct
+Batting,P >= 0.55,0.74,40.0
+Batting,P >= 0.6,0.9108,80.0
+Batting,P >= 0.65,0.6773,30.0
+Bowling,P >= 0.55,0.7604,30.0
+Bowling,P >= 0.6,0.9475,40.0
+Bowling,P >= 0.65,0.8521,50.0
