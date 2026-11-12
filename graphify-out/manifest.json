@@ -1,10 +1,4 @@
 {
-  "Round 1 Problem Statement _ SupeRR Selector Season 2.docx.pdf": {
-    "mtime": 1794295836.0,
-    "seen": 1794319263.215959,
-    "ast_hash": "a71b2265ac87085e0c110d56ea453e44",
-    "semantic_hash": "a71b2265ac87085e0c110d56ea453e44"
-  },
   ".agents/agents/data-engineering-agent.md": {
     "mtime": 1794323626.643261,
     "seen": 1794324503.676586,
@@ -53,64 +47,406 @@
     "ast_hash": "37e591904b80d9a038d86ac3e8ebb729",
     "semantic_hash": "37e591904b80d9a038d86ac3e8ebb729"
   },
-  "AGENTS.md": {
-    "mtime": 1794323587.0321279,
-    "seen": 1794324503.6765928,
-    "ast_hash": "99b416fbe2f032f6a9083be226a7dfdb",
-    "semantic_hash": "99b416fbe2f032f6a9083be226a7dfdb"
-  },
-  "scripts/stage1_data_engineering.py": {
+  "argon/scripts/stage1_data_engineering.py": {
     "mtime": 1794387436.6446557,
-    "seen": 1794387823.516881,
+    "seen": 1794496796.198446,
     "ast_hash": "c4a3d722ef62acc42a040b265285ea9e",
     "semantic_hash": ""
   },
-  "scripts/stage2_pressure_modeling.py": {
+  "argon/scripts/stage2_pressure_modeling.py": {
     "mtime": 1794387579.3172107,
-    "seen": 1794387823.516885,
+    "seen": 1794496796.1984482,
     "ast_hash": "426b3a5af2413e234a39594308596b4f",
     "semantic_hash": ""
   },
-  "scripts/stage3_validation_and_reporting.py": {
+  "argon/scripts/stage3_validation_and_reporting.py": {
     "mtime": 1794387678.9568567,
-    "seen": 1794387823.516887,
+    "seen": 1794496796.1984499,
     "ast_hash": "bc4bf8a8a130f0069d33f35fe6b24791",
     "semantic_hash": ""
   },
-  "METHODOLOGY_REPORT.md": {
+  "sonnet/outputs/red_team_checks.json": {
+    "mtime": 1794496691.5727165,
+    "seen": 1794496796.1984499,
+    "ast_hash": "2585601fa22419b83103d4dd0bee355e",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/shrinkage_params.json": {
+    "mtime": 1794496635.50057,
+    "seen": 1794496796.198451,
+    "ast_hash": "54479ae76b3ca83ba3c8b91080a12602",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/stage1_summary.json": {
+    "mtime": 1794496203.5978692,
+    "seen": 1794496796.198452,
+    "ast_hash": "f431143eec21e6ced18ab6f2854ebb48",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/stage2_stats.json": {
+    "mtime": 1794496557.2942,
+    "seen": 1794496796.198452,
+    "ast_hash": "1e1d302895a3293ad46c8f37335b15ea",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/build_ball_state.py": {
+    "mtime": 1794319490.0,
+    "seen": 1794496796.198453,
+    "ast_hash": "49a8304d991700c06824de8fc282ae7b",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/common.py": {
+    "mtime": 1794496136.2409303,
+    "seen": 1794496796.198453,
+    "ast_hash": "1f949e660c273c016021ab14f2e4ec6a",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage1_profile.py": {
+    "mtime": 1794496190.0892315,
+    "seen": 1794496796.198454,
+    "ast_hash": "1caa0ccd9fd2cb41c90a3c5471c809b3",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage2_pressure.py": {
+    "mtime": 1794496534.661908,
+    "seen": 1794496796.198454,
+    "ast_hash": "5654bfb9b31601c916d8ea00d9861365",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage3_ratings.py": {
+    "mtime": 1794496394.921465,
+    "seen": 1794496796.198454,
+    "ast_hash": "6b8df27371addde34a4248ff76c2e1b5",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage4_validation.py": {
+    "mtime": 1794496471.6312742,
+    "seen": 1794496796.198455,
+    "ast_hash": "0d436a5497cf6ba7dda9194a860c2245",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage5_audit_checklist.py": {
+    "mtime": 1794496615.1892664,
+    "seen": 1794496796.198455,
+    "ast_hash": "ed282e9731b1b9b268a54ca17714a479",
+    "semantic_hash": ""
+  },
+  "sonnet/scripts/stage5_report_charts.py": {
+    "mtime": 1794496565.6191852,
+    "seen": 1794496796.198456,
+    "ast_hash": "19640c27a8cb8a59b5928380602e3ade",
+    "semantic_hash": ""
+  },
+  "argon/AGENTS.md": {
+    "mtime": 1794323587.0321279,
+    "seen": 1794496796.198464,
+    "ast_hash": "99b416fbe2f032f6a9083be226a7dfdb",
+    "semantic_hash": ""
+  },
+  "argon/METHODOLOGY_REPORT.md": {
     "mtime": 1794387774.566022,
-    "seen": 1794387823.516903,
+    "seen": 1794496796.198464,
     "ast_hash": "0e4f39e15bd3dfd5890099f5710be716",
     "semantic_hash": ""
   },
-  "outputs/chart1_pressure_separation.png": {
+  "argon/README.md": {
+    "mtime": 1794388476.996213,
+    "seen": 1794496796.198465,
+    "ast_hash": "5bdce0853180e96955c1f908dd3299f6",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/batting-analyst.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198465,
+    "ast_hash": "fdceb6b54182847cad2d85388be9db9e",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/bowling-analyst.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198466,
+    "ast_hash": "09ca5b7a173d182d7ddad781894bef0b",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/data-engineer.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198466,
+    "ast_hash": "1fc1fbab1bc16f11ee5d4658fa6f258f",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/orchestrator.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198466,
+    "ast_hash": "a029ef8f50b04cec8ffc69e81697f673",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/pressure-modeler.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198467,
+    "ast_hash": "78b86834183cdcb373e39bf45e2d61b5",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/report-writer.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198467,
+    "ast_hash": "9154f7380e00b0436ce5f0a04ee2be67",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/agents/validator.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.1984682,
+    "ast_hash": "f3cddc1d7828c753b0d08a0aadaa8445",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/ball-state-features/SKILL.md": {
+    "mtime": 1794319563.0,
+    "seen": 1794496796.1984682,
+    "ast_hash": "5a11c384656fc1cd3b7aabf9397a8327",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/baselines-shrinkage-eligibility/SKILL.md": {
+    "mtime": 1794319601.0,
+    "seen": 1794496796.1984692,
+    "ast_hash": "04b4d675d7a75a490225612c5bbdb9b5",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/batting-pressure-metrics/SKILL.md": {
+    "mtime": 1794319601.0,
+    "seen": 1794496796.1984692,
+    "ast_hash": "352a99619556ec68f7cd60da565efd14",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/bowling-pressure-metrics/SKILL.md": {
+    "mtime": 1794319601.0,
+    "seen": 1794496796.1984699,
+    "ast_hash": "c9836bcf9b6d24b5a9eb89650bd52ae8",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/data-profiling/SKILL.md": {
+    "mtime": 1794319563.0,
+    "seen": 1794496796.1984699,
+    "ast_hash": "1401c46be7ab7d6dfe0031dd074201f1",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/ipl-t20i-fairness/SKILL.md": {
+    "mtime": 1794319601.0,
+    "seen": 1794496796.1984708,
+    "ast_hash": "069b650a2cd7ccc76614ca633e77f19d",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/methodology-report/SKILL.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.1984708,
+    "ast_hash": "559e7bd16bb51f72b716745183d8ac9a",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/pressure-definition/SKILL.md": {
+    "mtime": 1794319563.0,
+    "seen": 1794496796.1984708,
+    "ast_hash": "14b3981f0eef58e704f2f69d7be9b347",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/ranking-robustness/SKILL.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198472,
+    "ast_hash": "5e203810439741ad04cdf2a5db9e7062",
+    "semantic_hash": ""
+  },
+  "sonnet/.claude/skills/submission-checklist/SKILL.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198472,
+    "ast_hash": "90adaecd2ecfb4cedae6db049b8ca13c",
+    "semantic_hash": ""
+  },
+  "sonnet/CLAUDE.md": {
+    "mtime": 1794319501.0,
+    "seen": 1794496796.198473,
+    "ast_hash": "23b98000ac2fff9b49d07a7501741b44",
+    "semantic_hash": ""
+  },
+  "sonnet/README.md": {
+    "mtime": 1794356047.0,
+    "seen": 1794496796.198473,
+    "ast_hash": "b978fee6cbfa418dced9e3a6eb894d9d",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/DECISIONS.md": {
+    "mtime": 1794496718.4775763,
+    "seen": 1794496796.198474,
+    "ast_hash": "04edb6b89b944fd2c3db5a007b6e35ce",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/analysts_notes.md": {
+    "mtime": 1794496716.6770582,
+    "seen": 1794496796.198474,
+    "ast_hash": "7057dce1b2f6ee9c6898fcd123f2816d",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/ball_state_checks.md": {
+    "mtime": 1794496269.5811596,
+    "seen": 1794496796.1984751,
+    "ast_hash": "3b1f26bc7480167468f5f07b93e16cce",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/batting_top10.md": {
+    "mtime": 1794496711.050903,
+    "seen": 1794496796.1984751,
+    "ast_hash": "3f69bc23b6a458beb07748009633a10a",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/bowling_top10.md": {
+    "mtime": 1794496714.2606487,
+    "seen": 1794496796.198476,
+    "ast_hash": "fdd2959b346ef3e7fee26505dbf7a465",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/data_engineer_notes.md": {
+    "mtime": 1794496271.3485546,
+    "seen": 1794496796.198476,
+    "ast_hash": "27ea32b63fea80b5a49029fcbeca1ca2",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/data_profile.md": {
+    "mtime": 1794496266.9318807,
+    "seen": 1794496796.198477,
+    "ast_hash": "03e5f54f0954b42b0907a00700b06327",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/eligibility.md": {
+    "mtime": 1794496708.333784,
+    "seen": 1794496796.198477,
+    "ast_hash": "fc59e2fefa0e9cc67966e84f47b9cf76",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/opposition_adjustment_notes.md": {
+    "mtime": 1794496706.6911075,
+    "seen": 1794496796.198477,
+    "ast_hash": "9147f1541ab89bb84d1944ea9e956e10",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/pressure_definition.md": {
+    "mtime": 1794496596.9873474,
+    "seen": 1794496796.198478,
+    "ast_hash": "b558a0f9d287afb4edb7e51e9f3d39a0",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/pressure_modeler_notes.md": {
+    "mtime": 1794496599.9861944,
+    "seen": 1794496796.198478,
+    "ast_hash": "c3a897301acf4479b6782897b6904f04",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/report.md": {
+    "mtime": 1794496785.013491,
+    "seen": 1794496796.1984792,
+    "ast_hash": "add56456eb8ef03dc5c0f60e1669d27e",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/robustness_notes.md": {
+    "mtime": 1794496769.0601776,
+    "seen": 1794496796.1984792,
+    "ast_hash": "b9b24990de20382304774ea4c721191e",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/submission_checklist.md": {
+    "mtime": 1794496787.714471,
+    "seen": 1794496796.19848,
+    "ast_hash": "1cb9d3345f043b65e317f300dc2c85f3",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/top10_match_audit.md": {
+    "mtime": 1794496691.4295137,
+    "seen": 1794496796.19848,
+    "ast_hash": "f6e5d8a221a69a6a131ca0c28876b28a",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/validator_notes.md": {
+    "mtime": 1794496782.6658387,
+    "seen": 1794496796.1984808,
+    "ast_hash": "e44b27ca55ee525bcfb05624bd18d06a",
+    "semantic_hash": ""
+  },
+  "argon/Round 1 Problem Statement _ SupeRR Selector Season 2.docx.pdf": {
+    "mtime": 1794295836.0,
+    "seen": 1794496796.1984808,
+    "ast_hash": "a71b2265ac87085e0c110d56ea453e44",
+    "semantic_hash": ""
+  },
+  "sonnet/Round 1 Problem Statement _ SupeRR Selector Season 2.docx.pdf": {
+    "mtime": 1794295836.0,
+    "seen": 1794496796.198482,
+    "ast_hash": "a71b2265ac87085e0c110d56ea453e44",
+    "semantic_hash": ""
+  },
+  "argon/outputs/chart1_pressure_separation.png": {
     "mtime": 1794387687.0876465,
-    "seen": 1794387823.516906,
+    "seen": 1794496796.198482,
     "ast_hash": "b9f25b45b0afea88639971657e0c6553",
     "semantic_hash": ""
   },
-  "outputs/chart2_batting_pressure_matrix.png": {
+  "argon/outputs/chart2_batting_pressure_matrix.png": {
     "mtime": 1794387687.3264322,
-    "seen": 1794387823.516907,
+    "seen": 1794496796.198483,
     "ast_hash": "86d478240fcd98283c2ad554a16aa800",
     "semantic_hash": ""
   },
-  "outputs/chart3_bowling_pressure_matrix.png": {
+  "argon/outputs/chart3_bowling_pressure_matrix.png": {
     "mtime": 1794387687.544434,
-    "seen": 1794387823.5169091,
+    "seen": 1794496796.198483,
     "ast_hash": "c54cde3ee5c7bde3182f152be7ec2c9f",
     "semantic_hash": ""
   },
-  "outputs/chart4_prr_breakdown_and_uncertainty.png": {
+  "argon/outputs/chart4_prr_breakdown_and_uncertainty.png": {
     "mtime": 1794387687.8212366,
-    "seen": 1794387823.516914,
+    "seen": 1794496796.198484,
     "ast_hash": "90ea156e63625ee23d82b073a8a80ead",
     "semantic_hash": ""
   },
-  "README.md": {
-    "mtime": 1794388476.996213,
-    "seen": 1794388483.1274319,
-    "ast_hash": "5bdce0853180e96955c1f908dd3299f6",
+  "sonnet/outputs/figures/component_bars_top10.png": {
+    "mtime": 1794496732.2789128,
+    "seen": 1794496796.198484,
+    "ast_hash": "a9ce5454a51a50fbac44b1417acdee1e",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/eligibility_elbow.png": {
+    "mtime": 1794496635.599343,
+    "seen": 1794496796.198485,
+    "ast_hash": "2e7ca6b107c83585e59d801aa1e13089",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/ipl_vs_t20i_contrib.png": {
+    "mtime": 1794496732.380166,
+    "seen": 1794496796.198485,
+    "ast_hash": "78f37c4ba50efffdac630dca2dd4c32d",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/li_distribution.png": {
+    "mtime": 1794496557.0692394,
+    "seen": 1794496796.198485,
+    "ast_hash": "f373adbcc0cd0235d69d7fd499f46d89",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/pressure_heatmap_chase.png": {
+    "mtime": 1794496557.2060559,
+    "seen": 1794496796.198486,
+    "ast_hash": "c4577bd643c2f2386dfedc51febb0db4",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/robustness_rank_ci.png": {
+    "mtime": 1794496691.5723715,
+    "seen": 1794496796.198486,
+    "ast_hash": "ebbcc4761b5368af2fa84dc5cf05468f",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/shrinkage_before_after.png": {
+    "mtime": 1794496732.1481643,
+    "seen": 1794496796.198487,
+    "ast_hash": "8b7e61f0a42b9e8f5d3b48de116a18a9",
+    "semantic_hash": ""
+  },
+  "sonnet/outputs/figures/wp_calibration.png": {
+    "mtime": 1794496557.2918541,
+    "seen": 1794496796.198487,
+    "ast_hash": "e365d6fb84d88194fbde40e4e57667dc",
     "semantic_hash": ""
   }
 }

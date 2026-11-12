@@ -1,0 +1,16 @@
+{
+  "n_competitions": 141,
+  "n_teams_rows": 353,
+  "n_matches": 883,
+  "n_playing_eleven": 28381,
+  "n_mapping": 6413,
+  "n_bbb_rows": 200999,
+  "n_ball_state_rows": 200961,
+  "n_bbb_matches": 867,
+  "n_missing_bbb_matches": 16,
+  "n_super_over_matches": 6,
+  "n_dls_matches": 34,
+  "n_no_result_or_tie_matches": 41,
+  "n_anom_target_raw": 120,
+  "n_anom_target_rep": 6
+}
