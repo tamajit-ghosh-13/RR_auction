@@ -214,7 +214,11 @@ def quick_bootstrap_p_top10(
         mat_nv[r.midx, j] = r.val
 
     ranks = np.zeros((n_boot, P))
-    w1, w2, w3, w4 = wts
+    if len(wts) == 5:
+        w1, _, _, w2, w3 = wts
+        w4 = 0.0
+    else:
+        w1, w2, w3, w4 = wts
     m0 = 8.0
     for b in range(n_boot):
         idx = rng.integers(0, n_m, size=n_m)
@@ -269,16 +273,16 @@ def main() -> None:
     combos = [
         {"id": "C01_bye1_li90_anova", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 120, "bwl_b": 100, "min_m": 10, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C02_exact_extras1_diag", "d1": "exact_extras1", "hp": "is_hp_90", "bat_b": 120, "bwl_b": 100, "min_m": 10, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
-        {"id": "C03_bye1_li75_anova", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 180, "bwl_b": 150, "min_m": 12, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
-        {"id": "C04_bye1_li75_k100_w15", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 140, "bwl_b": 120, "min_m": 10, "rec": 2025, "wkt": 15.0, "k_ovr": 100.0, "wts": (0.50, 0.15, 0.25, 0.10)},
+        {"id": "C03_bye1_li75_anova", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 180, "bwl_b": 150, "min_m": 12, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.40, 0.20, 0.15, 0.15, 0.10)},
+        {"id": "C04_bye1_li75_k100_w15", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 140, "bwl_b": 120, "min_m": 10, "rec": 2025, "wkt": 15.0, "k_ovr": 100.0, "wts": (0.40, 0.20, 0.15, 0.15, 0.10)},
         {"id": "C05_bye1_li90_relaxed", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 80, "bwl_b": 80, "min_m": 8, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C06_bye1_li90_allyrs", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 120, "bwl_b": 100, "min_m": 10, "rec": 2022, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C07_bye1_li90_strict", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 150, "bwl_b": 130, "min_m": 12, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C08_bye1_li90_k100_w15", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 100, "bwl_b": 90, "min_m": 10, "rec": 2025, "wkt": 15.0, "k_ovr": 100.0, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C09_bye1_li90_pure_econ", "d1": "bye1_repaired", "hp": "is_hp_90", "bat_b": 120, "bwl_b": 100, "min_m": 10, "rec": 2025, "wkt": 0.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
         {"id": "C10_bye1_li95_extreme", "d1": "bye1_repaired", "hp": "is_hp_95", "bat_b": 60, "bwl_b": 50, "min_m": 6, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
-        {"id": "C11_bye1_ruleB", "d1": "bye1_repaired", "hp": "is_hp_rule", "bat_b": 140, "bwl_b": 120, "min_m": 10, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.50, 0.15, 0.25, 0.10)},
-        {"id": "C12_bye1_li75_consist35", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 160, "bwl_b": 140, "min_m": 12, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.40, 0.15, 0.35, 0.10)},
+        {"id": "C11_bye1_ruleB", "d1": "bye1_repaired", "hp": "is_hp_rule", "bat_b": 140, "bwl_b": 120, "min_m": 10, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.40, 0.20, 0.15, 0.15, 0.10)},
+        {"id": "C12_bye1_li75_consist35", "d1": "bye1_repaired", "hp": "is_hp_75", "bat_b": 160, "bwl_b": 140, "min_m": 12, "rec": 2025, "wkt": 12.0, "k_ovr": None, "wts": (0.35, 0.15, 0.15, 0.10, 0.25)},
     ]
 
     out_dir = Path("outputs/gate_combinations")

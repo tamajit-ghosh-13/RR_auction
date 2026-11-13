@@ -61,5 +61,31 @@ Every methodological choice documents both the `C03` primary specification selec
   **DECISION (`C03` Primary): Batters `>= 180 HP balls`, Bowlers `>= 150 HP legal balls`, both `>= 12 HP matches` and `last_year >= 2025` (`83` eligible batters, `93` eligible bowlers).**
   - *Why*: Stricter floors eliminate single-season fluke profiles without strangling pool depth (`83` / `93` vs only `23` / `38` under strict `C07` or `32` / `59` under `C01`).
 
-- **D15. Composite Pillar Weights**:
-  **DECISION (`C03` Primary): `50% EB Performance (RAE100 / Total RSAE24) + 15% Own-Baseline Delta + 25% Winsorised Match Consistency + 10% WPA / Extras Discipline`, cross-checked against `C12` (`40/15/35/10` consistency tilt: `rho = 0.9980` batters with `10/10` overlap, `rho = 0.9957` bowlers with `9/10` overlap).**
+- **D15. 5-Pillar Composite Architecture Weights**:
+  **DECISION LOCKED (`C03` Primary): `40% Shrunk Value (Tier & Rivalry Adj) + 20% Technical Execution & Composure + 15% Away Turf Delta + 15% Own-Baseline Lift + 10% Match Consistency`, cross-checked against 12-combination sweep and stability panel.**
+  - *Batting Execution*: `0.40 * z(SRR) + 0.30 * z(DBA) + 0.30 * z(BPR)`.
+  - *Bowling Composure & Execution*: `0.40 * z(PBC_eb) + 0.30 * z(Boundary Suppression) + 0.30 * z(Wicket Strike Rate)`.
+
+---
+
+## Stage 4 — Strategic Enhancements (`strategic-analyst`)
+
+- **D16. Opposition Team Tiers & Strength-of-Schedule Multipliers**:
+  **DECISION LOCKED: Apply explicit opponent quality weights at delivery level.**
+  - *T20I Tiers*: Tier 1 (`1.25x`): India (`18`), Australia (`20`); Tier 2 (`1.10x`): England (`22`), South Africa (`19`), New Zealand (`17`); Tier 3 (`0.95x`): Pakistan (`25`), West Indies (`28`), Sri Lanka (`27`), Afghanistan (`78`); Tier 4 (`0.75x`): Bangladesh (`21`), Ireland (`23`), Zimbabwe (`72`), Associates.
+  - *IPL Tiers (User Explicit)*: Tier 1 (`1.20x`): RCB (`5`), GT (`3508`), PBKS (`4`); Tier 2 (`1.05x`): CSK (`1`), MI (`2`), KKR (`8`), SRH (`242`); Tier 3 (`0.90x`): RR (`3`), DC (`7`), LSG (`3509`).
+
+- **D17. Marquee Rivalry Stakes Multiplier (`1.15x`)**:
+  **DECISION LOCKED: Apply `1.15x` high-voltage multiplier on deliveries in 11 historical marquee rivalries (72 matches in clean dataset).**
+  - *IPL Derbies (4)*: MI vs CSK (`{1, 2}`), CSK vs RCB (`{1, 5}`), RCB vs KKR (`{5, 8}`), PBKS vs RR (`{4, 3}`).
+  - *T20I Derbies (7)*: IND vs PAK (`{18, 25}`), AUS vs ENG (`{20, 22}`), IND vs AUS (`{18, 20}`), ENG vs IND (`{22, 18}`), AUS vs NZ (`{20, 17}`), PAK vs AFG (`{25, 78}`), BAN vs SL (`{21, 27}`).
+
+- **D18. Away Turf Lift ("Travel Warrior" Delta — Option C)**:
+  **DECISION LOCKED: $\Delta_{\text{Away}} = \text{EB Performance}_{\text{Away HP}} - \text{EB Performance}_{\text{Home HP}}$ derived from `matches.csv` `home_team_id` vs `away_team_id`.**
+  - Isolates players whose performance elevates in hostile away conditions vs comfort-zone home pitches. Shrunk toward neutral baseline to reward verified travel resilience without penalizing small sample splits.
+
+- **D19. Granular Technical Execution & Post-Boundary Composure (PBC)**:
+  **DECISION LOCKED: Delivery-level rebound and technical execution scoring.**
+  - *Bowler PBC*: On delivery $t+1$ following a boundary in the same over: `+1.0` (dot/wicket), `+0.5` (single), `0.0` (2/3 runs), `-1.0` (consecutive boundary or extra). Shrunk via empirical Bayes ($m=15$, prior mean $\mu=0.237$). Combined with Boundary Suppression ($1 - \text{conceded boundary rate}$) and Wicket Strike Rate ($24 \times \text{wkts}/\text{legal}$).
+  - *Batter Technical Radar*: Strike Rotation Rate ($\text{SRR} = \% \text{ 1, 2, 3}$), Dot Ball Avoidance ($\text{DBA} = 1 - \text{dot rate}$), Boundary Punch Rate ($\text{BPR} = \% \text{ 4, 6}$).
+

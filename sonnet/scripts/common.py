@@ -11,6 +11,61 @@ SEED = 42
 IPL_COMP_IDS = {1358, 1715, 2193, 2725, 3298}
 EMERGING_COMP_IDS = {2670, 3289}
 
+# Opposition Strength-of-Schedule Tier Weights (Explicit User Specifications)
+# IPL: Tier 1 (1.20x) RCB, GT, PBKS | Tier 2 (1.05x) CSK, MI, KKR, SRH | Tier 3 (0.90x) RR, DC, LSG
+IPL_TIER_1_TEAMS = {5, 3508, 4}        # RCB, GT, PBKS
+IPL_TIER_2_TEAMS = {1, 2, 8, 242}      # CSK, MI, KKR, SRH
+IPL_TIER_3_TEAMS = {3, 7, 3509}        # RR, DC, LSG
+
+# T20I: Tier 1 (1.25x) IND, AUS | Tier 2 (1.10x) ENG, SA, NZ | Tier 3 (0.95x) PAK, WI, SL, AFG | Tier 4 (0.75x) BAN, IRE, ZIM, Associates
+T20I_TIER_1_TEAMS = {18, 20}           # IND, AUS
+T20I_TIER_2_TEAMS = {22, 19, 17}       # ENG, SA, NZ
+T20I_TIER_3_TEAMS = {25, 28, 27, 78}   # PAK, WI, SL, AFG
+T20I_TIER_4_TEAMS = {21, 23, 72}       # BAN, IRE, ZIM
+
+# Approved Marquee Rivalry Pairs (4 IPL Derbies + 7 T20I Derbies)
+MARQUEE_RIVALRY_PAIRS = [
+    {1, 2},    # MI vs CSK (El Clasico of IPL)
+    {1, 5},    # CSK vs RCB (Southern Derby)
+    {5, 8},    # RCB vs KKR (Original Rivalry)
+    {4, 3},    # PBKS vs RR (Northern Thriller)
+    {18, 25},  # IND vs PAK (The Mother of All Rivalries)
+    {20, 22},  # AUS vs ENG (T20 Ashes)
+    {18, 20},  # IND vs AUS (Modern Heavyweights)
+    {20, 17},  # AUS vs NZ (Trans-Tasman Clash)
+    {25, 78},  # PAK vs AFG (Asian Border Derby)
+    {21, 27},  # BAN vs SL (Naagin Derby)
+]
+
+
+def get_team_tier_weight(team_id: int, fmt: str) -> float:
+    """Return opposition quality weight based on verified team pedigree tiers."""
+    tid = int(team_id)
+    if fmt == "IPL":
+        if tid in IPL_TIER_1_TEAMS:
+            return 1.20
+        elif tid in IPL_TIER_2_TEAMS:
+            return 1.05
+        elif tid in IPL_TIER_3_TEAMS:
+            return 0.90
+        return 1.00
+    elif fmt == "T20I":
+        if tid in T20I_TIER_1_TEAMS:
+            return 1.25
+        elif tid in T20I_TIER_2_TEAMS:
+            return 1.10
+        elif tid in T20I_TIER_3_TEAMS:
+            return 0.95
+        return 0.75  # Tier 4 & Associates
+    return 1.00
+
+
+def is_marquee_rivalry(team1_id: int, team2_id: int) -> bool:
+    """Return True if matchup is one of the 11 verified marquee derbies."""
+    s = {int(team1_id), int(team2_id)}
+    return any(s == rp for rp in MARQUEE_RIVALRY_PAIRS)
+
+
 # Duplicate player IDs representing the exact same cricketer across seasons/teams
 SPLIT_PLAYER_ID_MAP = {
     39444: 8638,   # Basil Hameed

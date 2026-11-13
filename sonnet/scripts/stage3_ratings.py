@@ -20,11 +20,64 @@ from common import (
     batter_runs,
     bowler_runs,
     canon_player_ids,
+    get_team_tier_weight,
+    is_marquee_rivalry,
     is_striker_dismissed,
     legal_balls,
 )
 
 plt.rcParams.update({"figure.dpi": 140, "axes.spines.top": False, "axes.spines.right": False})
+
+
+def enrich_context_and_composure(df: pd.DataFrame, matches_df: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Enrich ball-by-ball deliveries with Home/Away turf, opposition tiers, rivalry stakes, and PBC."""
+    d = df.copy()
+    if matches_df is not None and ("home_team_id" not in d.columns or "away_team_id" not in d.columns):
+        m_sub = matches_df[["match_id", "home_team_id", "away_team_id"]].drop_duplicates("match_id")
+        d = d.merge(m_sub, on="match_id", how="left")
+    elif "home_team_id" not in d.columns and Path("data/raw/matches.csv").exists():
+        m_raw = pd.read_csv("data/raw/matches.csv", usecols=["match_id", "home_team_id", "away_team_id"]).drop_duplicates("match_id")
+        d = d.merge(m_raw, on="match_id", how="left")
+
+    fmt_series = assign_format_bucket(d) if "fmt" not in d.columns else d["fmt"]
+    d["fmt"] = fmt_series
+
+    # 1. Away vs Home turf indicators (batter & bowler perspective)
+    if "away_team_id" in d.columns:
+        d["bat_is_away"] = (d["batting_team_id"] == d["away_team_id"]).astype(int)
+        d["bwl_is_away"] = (d["bowling_team_id"] == d["away_team_id"]).astype(int)
+    else:
+        d["bat_is_away"] = 0
+        d["bwl_is_away"] = 0
+
+    # 2. Opposition Strength-of-Schedule Tier Weights
+    d["opp_wt_bat"] = [get_team_tier_weight(t, f) for t, f in zip(d["bowling_team_id"], d["fmt"])]
+    d["opp_wt_bwl"] = [get_team_tier_weight(t, f) for t, f in zip(d["batting_team_id"], d["fmt"])]
+
+    # 3. Marquee Rivalry Stakes Multiplier (1.15x)
+    d["is_rivalry"] = [is_marquee_rivalry(t1, t2) for t1, t2 in zip(d["batting_team_id"], d["bowling_team_id"])]
+    d["riv_mult"] = np.where(d["is_rivalry"], 1.15, 1.0)
+
+    # 4. Post-Boundary Composure (PBC) on delivery t+1 following a conceded boundary in the same over
+    d = d.sort_values(["match_id", "innings", "overid", "innings_ball_num"]).reset_index(drop=True)
+    is_boundary = d["runs"].isin([4, 6]) | d["team_runs"].isin([4, 6])
+    d["is_boundary_conceded"] = is_boundary.astype(int)
+
+    prev_is_bdry = (d.groupby(["match_id", "innings", "overid"])["is_boundary_conceded"].shift(1).fillna(0) == 1)
+    prev_bowler = d.groupby(["match_id", "innings", "overid"])["bowler_id"].shift(1)
+    rebound_mask = prev_is_bdry & (prev_bowler == d["bowler_id"])
+    d["is_rebound_ball"] = rebound_mask.astype(int)
+
+    cond_neg = (d["is_wide"] == 1) | (d["is_noball"] == 1) | d["runs"].isin([4, 6])
+    cond_pos = (d["is_wkt_bowler"] == 1) | (d["bowler_runs"] == 0)
+    cond_single = d["bowler_runs"] == 1
+
+    d["pbc_score"] = np.where(~rebound_mask, np.nan,
+                       np.where(cond_neg, -1.0,
+                       np.where(cond_pos, 1.0,
+                       np.where(cond_single, 0.5, 0.0))))
+
+    return d
 
 
 def compute_format_baselines(df: pd.DataFrame) -> pd.DataFrame:
@@ -217,7 +270,7 @@ def build_batting_ratings(
     min_hp_balls: int = 120,
     min_hp_matches: int = 10,
     recent_cutoff_year: int = 2025,
-    weights: tuple[float, float, float, float] = (0.50, 0.15, 0.25, 0.10),
+    weights: tuple[float, ...] = (0.40, 0.20, 0.15, 0.15, 0.10),
     use_opp_adj: bool = True,
     k_override: float | None = None,
 ) -> tuple[pd.DataFrame, dict]:
@@ -243,8 +296,13 @@ def build_batting_ratings(
     # Deliveries faced
     bf_df = d[d["bf"]].copy()
     bf_df["pid"] = bf_df["striker_id"].astype(int)
-    bf_df["rae_ball"] = bf_df["bat_runs"] - bf_df[x_col]
-    bf_df["rae_ctx_ball"] = bf_df["bat_runs"] - bf_df["x_bat_runs_ctx"]
+    mult_bat = (
+        bf_df["opp_wt_bat"] * bf_df["riv_mult"]
+        if "opp_wt_bat" in bf_df.columns and "riv_mult" in bf_df.columns
+        else 1.0
+    )
+    bf_df["rae_ball"] = (bf_df["bat_runs"] - bf_df[x_col]) * mult_bat
+    bf_df["rae_ctx_ball"] = (bf_df["bat_runs"] - bf_df["x_bat_runs_ctx"]) * mult_bat
 
     # Overall activity per batter (IPL + T20I non-DLS)
     act = (
@@ -273,6 +331,11 @@ def build_batting_ratings(
         hp_rae_ctx_sum=("rae_ctx_ball", "sum"),
         hp_bdries=("runs", lambda s: int(s.isin([4, 6]).sum())),
         hp_dots=("bat_runs", lambda s: int((s == 0).sum())),
+        hp_singles_plus=("bat_runs", lambda s: int(s.isin([1, 2, 3]).sum())),
+        hp_away_bf=("bf", lambda s: int(s[hp_df.loc[s.index, "bat_is_away"] == 1].sum()) if "bat_is_away" in hp_df.columns else 0),
+        hp_away_rae=("rae_ball", lambda s: float(s[hp_df.loc[s.index, "bat_is_away"] == 1].sum()) if "bat_is_away" in hp_df.columns else 0.0),
+        hp_home_bf=("bf", lambda s: int(s[hp_df.loc[s.index, "bat_is_away"] == 0].sum()) if "bat_is_away" in hp_df.columns else 0),
+        hp_home_rae=("rae_ball", lambda s: float(s[hp_df.loc[s.index, "bat_is_away"] == 0].sum()) if "bat_is_away" in hp_df.columns else 0.0),
         hp_ipl_bf=("fmt", lambda s: int((s == "IPL").sum())),
         hp_t20i_bf=("fmt", lambda s: int((s == "T20I").sum())),
         hp_ipl_rae=("rae_ball", lambda s: float(s[hp_df.loc[s.index, "fmt"] == "IPL"].sum())),
@@ -314,7 +377,12 @@ def build_batting_ratings(
     )
 
     res = act.join(hp_agg, how="left").join(nhp_agg, how="left").join(cons_agg, how="left")
-    for col in ["hp_matches", "hp_bf", "hp_runs", "hp_xruns", "hp_xruns_adj", "hp_wpa", "hp_rae_sum", "hp_rae_ctx_sum", "nhp_bf", "nhp_rae_sum", "hp_ipl_bf", "hp_t20i_bf", "hp_ipl_rae", "hp_t20i_rae", "hp_cons_matches", "pm_pos_count", "max_match_rae"]:
+    for col in [
+        "hp_matches", "hp_bf", "hp_runs", "hp_xruns", "hp_xruns_adj", "hp_wpa",
+        "hp_rae_sum", "hp_rae_ctx_sum", "nhp_bf", "nhp_rae_sum", "hp_bdries", "hp_dots", "hp_singles_plus",
+        "hp_away_bf", "hp_away_rae", "hp_home_bf", "hp_home_rae",
+        "hp_ipl_bf", "hp_t20i_bf", "hp_ipl_rae", "hp_t20i_rae", "hp_cons_matches", "pm_pos_count", "max_match_rae"
+    ]:
         res[col] = res[col].fillna(0.0)
 
     res["hp_outs"] = res.index.map(wkt_hp).fillna(0.0)
@@ -333,7 +401,7 @@ def build_batting_ratings(
     mu_nhp = float(pool_p["nhp_rae_sum"].sum() / np.maximum(1.0, pool_p["nhp_bf"].sum()) * 100.0) if len(pool_p) else 0.0
     mu_pos = float(pool_p["pm_pos_count"].sum() / np.maximum(1.0, pool_p["hp_cons_matches"].sum())) if len(pool_p) else 0.5
 
-    # Empirical Bayes shrinkage towards prior mean
+    # Empirical Bayes shrinkage towards prior mean (Pillar 1: Value, Pillar 4: Own Lift)
     w_hp = res["hp_bf"] / (res["hp_bf"] + k_balls)
     w_nhp = res["nhp_bf"] / (res["nhp_bf"] + k_nhp)
     res["hp_rae100_eb"] = w_hp * res["hp_rae100_raw"] + (1.0 - w_hp) * mu_rae
@@ -341,10 +409,23 @@ def build_batting_ratings(
     res["nhp_rae100_eb"] = w_nhp * res["nhp_rae100_raw"] + (1.0 - w_nhp) * mu_nhp
     res["delta_own_rae100"] = res["hp_rae100_eb"] - res["nhp_rae100_eb"]
 
-    # Beta-Binomial positive-match rate shrunk toward pool rate (prior strength m0 = 8 matches) + mean_pm_rae
+    # Pillar 2: Granular Technical Execution (Strike Rotation, Dot Avoidance, Boundary Punch)
+    res["srr"] = res["hp_singles_plus"] / np.maximum(1.0, res["hp_bf"])
+    res["dba"] = 1.0 - (res["hp_dots"] / np.maximum(1.0, res["hp_bf"]))
+    res["bpr"] = res["hp_bdries"] / np.maximum(1.0, res["hp_bf"])
+
+    # Pillar 3: Away Turf Lift ("Travel Warrior" Delta - Option C)
+    w_away = res["hp_away_bf"] / (res["hp_away_bf"] + k_balls)
+    w_home = res["hp_home_bf"] / (res["hp_home_bf"] + k_balls)
+    raw_away = np.where(res["hp_away_bf"] > 0, 100.0 * res["hp_away_rae"] / res["hp_away_bf"], 0.0)
+    raw_home = np.where(res["hp_home_bf"] > 0, 100.0 * res["hp_home_rae"] / res["hp_home_bf"], 0.0)
+    res["away_eb"] = w_away * raw_away + (1.0 - w_away) * mu_rae
+    res["home_eb"] = w_home * raw_home + (1.0 - w_home) * mu_rae
+    res["delta_away_home"] = res["away_eb"] - res["home_eb"]
+
+    # Pillar 5: Match Consistency (Beta-Binomial positive rate + winsorised Sharpe)
     m0 = 8.0
     res["pos_match_rate_eb"] = (res["pm_pos_count"] + m0 * mu_pos) / (res["hp_cons_matches"] + m0)
-    # Combined consistency metric: 50% shrunk positive-match rate + 50% shrunk Sharpe-like stability
     w_m = res["hp_cons_matches"] / (res["hp_cons_matches"] + m0)
     sharpe_raw = res["pm_mean_rae100"].fillna(0.0) / np.maximum(25.0, res["pm_std_rae100"].fillna(60.0))
     res["pm_sharpe_eb"] = w_m * sharpe_raw
@@ -362,25 +443,59 @@ def build_batting_ratings(
     res["hp_ipl_rae100"] = np.where(res["hp_ipl_bf"] > 0, 100.0 * res["hp_ipl_rae"] / res["hp_ipl_bf"], np.nan)
     res["hp_t20i_rae100"] = np.where(res["hp_t20i_bf"] > 0, 100.0 * res["hp_t20i_rae"] / res["hp_t20i_bf"], np.nan)
 
-    # Composite scoring within eligible pool
+    # 5-Pillar Composite scoring within eligible pool
     elig = res[res["eligible"]].copy()
     if len(elig) > 1:
-        z_rae = zscore(elig["hp_rae100_eb"])
+        z_val = zscore(elig["hp_rae100_eb"])
+        z_exec = (1.0 / 3.0) * zscore(elig["srr"]) + (1.0 / 3.0) * zscore(elig["dba"]) + (1.0 / 3.0) * zscore(elig["bpr"])
+        z_away = zscore(elig["delta_away_home"])
         z_del = zscore(elig["delta_own_rae100"])
         z_con = 0.5 * zscore(elig["pos_match_rate_eb"]) + 0.5 * zscore(elig["pm_sharpe_eb"])
-        z_wpa = zscore(elig["hp_wpa100_eb"])
-        w1, w2, w3, w4 = weights
-        elig["z_rae100"] = z_rae
+
+        if len(weights) == 5:
+            w_val, w_exec, w_away, w_del, w_con = weights
+        else:
+            w_val, w_del, w_con, _ = weights
+            w_val = w_val * 0.8
+            w_exec = 0.20
+            w_away = 0.15
+
+        elig["z_value"] = z_val
+        elig["z_exec"] = z_exec
+        elig["z_away"] = z_away
         elig["z_delta"] = z_del
         elig["z_consistency"] = z_con
-        elig["z_wpa100"] = z_wpa
-        elig["composite_z"] = w1 * z_rae + w2 * z_del + w3 * z_con + w4 * z_wpa
+        elig["composite_z"] = (
+            w_val * z_val
+            + w_exec * z_exec
+            + w_away * z_away
+            + w_del * z_del
+            + w_con * z_con
+        )
         elig["pressure_score_0_100"] = 50.0 + 15.0 * elig["composite_z"]
         elig["rank_eb"] = elig["composite_z"].rank(ascending=False, method="min").astype(int)
         elig["rank_raw_rae100"] = elig["hp_rae100_raw"].rank(ascending=False, method="min").astype(int)
-        for col in ["z_rae100", "z_delta", "z_consistency", "z_wpa100", "composite_z", "pressure_score_0_100", "rank_eb", "rank_raw_rae100"]:
+        for col in [
+            "z_value", "z_exec", "z_away", "z_delta", "z_consistency",
+            "composite_z", "pressure_score_0_100", "rank_eb", "rank_raw_rae100"
+        ]:
             res[col] = np.nan
             res.loc[elig.index, col] = elig[col]
+
+    res = res.reset_index().rename(columns={"pid": "player_id"})
+    res = res.sort_values(["eligible", "composite_z", "hp_rae100_eb"], ascending=[False, False, False])
+    meta = {
+        "k_balls": float(k_balls),
+        "sigma2_within_match": sig_w,
+        "sigma2_between_match": sig_b,
+        "prior_mu_rae100": mu_rae,
+        "prior_mu_wpa100": mu_wpa,
+        "prior_mu_nhp_rae100": mu_nhp,
+        "prior_mu_pos_match": mu_pos,
+        "pm_winsor_bounds": [float(q01), float(q99)],
+        "n_eligible": int(res["eligible"].sum()),
+    }
+    return res, meta
 
     res = res.reset_index().rename(columns={"pid": "player_id"})
     res = res.sort_values(["eligible", "composite_z", "hp_rae100_eb"], ascending=[False, False, False])
@@ -404,7 +519,7 @@ def build_bowling_ratings(
     min_hp_balls: int = 100,
     min_hp_matches: int = 10,
     recent_cutoff_year: int = 2025,
-    weights: tuple[float, float, float, float] = (0.50, 0.15, 0.25, 0.10),
+    weights: tuple[float, ...] = (0.40, 0.20, 0.15, 0.15, 0.10),
     use_opp_adj: bool = True,
     wkt_run_value: float = 12.0,
     k_override: float | None = None,
@@ -417,11 +532,16 @@ def build_bowling_ratings(
     xr_col = "x_bwl_runs_adj" if use_opp_adj else "x_bwl_runs_ctx"
     xw_col = "x_bwl_wkt_adj" if use_opp_adj else "x_bwl_wkt_ctx"
 
-    # Per-ball value: Runs Saved + Wicket Value Above Expected (Bowler Perspective)
-    d["rsae_runs_ball"] = d[xr_col] - d["bwl_runs"]
-    d["wae_ball"] = d["is_wkt_bowler"] - d[xw_col]
+    # Per-ball value scaled by Opposition Tier & Marquee Rivalry multipliers
+    mult_bwl = (
+        d["opp_wt_bwl"] * d["riv_mult"]
+        if "opp_wt_bwl" in d.columns and "riv_mult" in d.columns
+        else 1.0
+    )
+    d["rsae_runs_ball"] = (d[xr_col] - d["bwl_runs"]) * mult_bwl
+    d["wae_ball"] = (d["is_wkt_bowler"] - d[xw_col]) * mult_bwl
     d["total_rsae_ball"] = d["rsae_runs_ball"] + wkt_run_value * d["wae_ball"]
-    d["total_rsae_ctx_ball"] = (d["x_bwl_runs_ctx"] - d["bwl_runs"]) + wkt_run_value * (d["is_wkt_bowler"] - d["x_bwl_wkt_ctx"])
+    d["total_rsae_ctx_ball"] = ((d["x_bwl_runs_ctx"] - d["bwl_runs"]) + wkt_run_value * (d["is_wkt_bowler"] - d["x_bwl_wkt_ctx"])) * mult_bwl
     d["disc_saved_ball"] = d["x_bwl_extra_ctx"] - d["is_extra_bwl"]
     d["wpa_saved_ball"] = -d["delta_wp"]
 
@@ -457,6 +577,11 @@ def build_bowling_ratings(
         hp_extras_cnt=("is_extra_bwl", "sum"),
         hp_disc_saved=("disc_saved_ball", "sum"),
         hp_dots=("bwl_runs", lambda s: int((s == 0).sum())),
+        hp_bdries=("runs", lambda s: int(s.isin([4, 6]).sum())),
+        hp_away_legal=("leg", lambda s: int(s[hp_df.loc[s.index, "bwl_is_away"] == 1].sum()) if "bwl_is_away" in hp_df.columns else 0),
+        hp_away_trsa=("total_rsae_ball", lambda s: float(s[hp_df.loc[s.index, "bwl_is_away"] == 1].sum()) if "bwl_is_away" in hp_df.columns else 0.0),
+        hp_home_legal=("leg", lambda s: int(s[hp_df.loc[s.index, "bwl_is_away"] == 0].sum()) if "bwl_is_away" in hp_df.columns else 0),
+        hp_home_trsa=("total_rsae_ball", lambda s: float(s[hp_df.loc[s.index, "bwl_is_away"] == 0].sum()) if "bwl_is_away" in hp_df.columns else 0.0),
         hp_ipl_legal=("leg", lambda s: int(s[hp_df.loc[s.index, "fmt"] == "IPL"].sum())),
         hp_t20i_legal=("leg", lambda s: int(s[hp_df.loc[s.index, "fmt"] == "T20I"].sum())),
         hp_ipl_trsa=("total_rsae_ball", lambda s: float(s[hp_df.loc[s.index, "fmt"] == "IPL"].sum())),
@@ -471,6 +596,16 @@ def build_bowling_ratings(
         nhp_legal=("leg", "sum"),
         nhp_total_rsae_sum=("total_rsae_ball", "sum"),
     )
+
+    # Post-Boundary Composure (PBC) aggregated over rebound deliveries
+    if "is_rebound_ball" in d.columns and "pbc_score" in d.columns:
+        pbc_sub = d[d["is_rebound_ball"] == 1]
+        pbc_agg = pbc_sub.groupby("pid").agg(
+            pbc_n=("pbc_score", "count"),
+            pbc_mean=("pbc_score", "mean"),
+        )
+    else:
+        pbc_agg = pd.DataFrame(columns=["pbc_n", "pbc_mean"])
 
     # Per-match consistency (>= 4 legal HP balls in a match; winsorised 1-99th pct)
     pm = (
@@ -496,8 +631,14 @@ def build_bowling_ratings(
         max_match_trsa=("m_trsa", "max"),
     )
 
-    res = act.join(hp_agg, how="left").join(nhp_agg, how="left").join(cons_agg, how="left")
-    for col in ["hp_matches", "hp_balls_all", "hp_legal", "hp_runs", "hp_xruns", "hp_wkts", "hp_xwkts", "hp_rsae_sum", "hp_total_rsae_sum", "hp_total_rsae_ctx_sum", "hp_wpa_saved", "hp_extras_cnt", "hp_disc_saved", "nhp_legal", "nhp_total_rsae_sum", "hp_ipl_legal", "hp_t20i_legal", "hp_ipl_trsa", "hp_t20i_trsa", "hp_cons_matches", "pm_pos_count", "max_match_trsa"]:
+    res = act.join(hp_agg, how="left").join(nhp_agg, how="left").join(pbc_agg, how="left").join(cons_agg, how="left")
+    for col in [
+        "hp_matches", "hp_balls_all", "hp_legal", "hp_runs", "hp_xruns", "hp_wkts", "hp_xwkts",
+        "hp_rsae_sum", "hp_total_rsae_sum", "hp_total_rsae_ctx_sum", "hp_wpa_saved", "hp_extras_cnt", "hp_disc_saved",
+        "hp_bdries", "hp_away_legal", "hp_away_trsa", "hp_home_legal", "hp_home_trsa", "pbc_n",
+        "nhp_legal", "nhp_total_rsae_sum", "hp_ipl_legal", "hp_t20i_legal", "hp_ipl_trsa", "hp_t20i_trsa",
+        "hp_cons_matches", "pm_pos_count", "max_match_trsa"
+    ]:
         res[col] = res[col].fillna(0.0)
 
     res["hp_econ"] = np.where(res["hp_legal"] > 0, 6.0 * res["hp_runs"] / res["hp_legal"], 0.0)
@@ -514,9 +655,10 @@ def build_bowling_ratings(
     mu_trsa = float(pool_p["hp_total_rsae_sum"].sum() / np.maximum(1.0, pool_p["hp_legal"].sum()) * 24.0) if len(pool_p) else 0.0
     mu_wpa = float(pool_p["hp_wpa_saved"].sum() / np.maximum(1.0, pool_p["hp_legal"].sum()) * 24.0) if len(pool_p) else 0.0
     mu_disc = float(pool_p["hp_disc_saved"].sum() / np.maximum(1.0, pool_p["hp_legal"].sum()) * 24.0) if len(pool_p) else 0.0
-    mu_nhp = float(pool_p["nhp_total_rsae_sum"].sum() / np.maximum(1.0, pool_p["nhp_legal"].sum()) * 24.0) if len(pool_p) else 0.0
+    mu_nhp = float(pool_p["nhp_total_rsae_sum"].sum() / np.maximum(1.0, pool_p["hp_legal"].sum()) * 24.0) if len(pool_p) else 0.0
     mu_pos = float(pool_p["pm_pos_count"].sum() / np.maximum(1.0, pool_p["hp_cons_matches"].sum())) if len(pool_p) else 0.5
 
+    # Empirical Bayes shrinkage towards prior mean (Pillar 1: Value, Pillar 4: Own Lift)
     w_hp = res["hp_legal"] / (res["hp_legal"] + k_balls)
     w_nhp = res["nhp_legal"] / (res["nhp_legal"] + k_nhp)
     res["hp_total_rsae24_eb"] = w_hp * res["hp_total_rsae24_raw"] + (1.0 - w_hp) * mu_trsa
@@ -525,6 +667,23 @@ def build_bowling_ratings(
     res["nhp_total_rsae24_eb"] = w_nhp * res["nhp_total_rsae24_raw"] + (1.0 - w_nhp) * mu_nhp
     res["delta_own_rsae24"] = res["hp_total_rsae24_eb"] - res["nhp_total_rsae24_eb"]
 
+    # Pillar 2: Granular Technical Execution & Post-Boundary Composure (PBC, Boundary Suppression, Wicket Strike Rate)
+    mu_pbc = 0.237
+    w_pbc = res["pbc_n"] / (res["pbc_n"] + 15.0)
+    res["pbc_eb"] = w_pbc * res["pbc_mean"].fillna(mu_pbc) + (1.0 - w_pbc) * mu_pbc
+    res["boundary_suppression"] = 1.0 - (res["hp_bdries"] / np.maximum(1.0, res["hp_legal"]))
+    res["wicket_sr24"] = 24.0 * (res["hp_wkts"] / np.maximum(1.0, res["hp_legal"]))
+
+    # Pillar 3: Away Turf Lift ("Travel Warrior" Delta - Option C)
+    w_away = res["hp_away_legal"] / (res["hp_away_legal"] + k_balls)
+    w_home = res["hp_home_legal"] / (res["hp_home_legal"] + k_balls)
+    raw_away = np.where(res["hp_away_legal"] > 0, 24.0 * res["hp_away_trsa"] / res["hp_away_legal"], 0.0)
+    raw_home = np.where(res["hp_home_legal"] > 0, 24.0 * res["hp_home_trsa"] / res["hp_home_legal"], 0.0)
+    res["away_eb"] = w_away * raw_away + (1.0 - w_away) * mu_trsa
+    res["home_eb"] = w_home * raw_home + (1.0 - w_home) * mu_trsa
+    res["delta_away_home"] = res["away_eb"] - res["home_eb"]
+
+    # Pillar 5: Match Consistency (Beta-Binomial positive rate + winsorised Sharpe)
     m0 = 8.0
     res["pos_match_rate_eb"] = (res["pm_pos_count"] + m0 * mu_pos) / (res["hp_cons_matches"] + m0)
     w_m = res["hp_cons_matches"] / (res["hp_cons_matches"] + m0)
@@ -536,29 +695,49 @@ def build_bowling_ratings(
         & (res["hp_matches"] >= min_hp_matches)
         & (res["last_year"] >= recent_cutoff_year)
     )
-    res["max_1match_share"] = np.where(res["hp_total_rsae_sum"] > 0, res["max_match_trsa"] / res["hp_total_rsae_sum"], 0.0)
+    res["max_1match_share"] = np.where(res["hp_total_rsae24_raw"] > 0, res["max_match_trsa"] / res["hp_total_rsae_sum"], 0.0)
     res["flag_single_match_dep"] = res["max_1match_share"] > 0.35
     res["hp_ipl_share"] = np.where(res["hp_legal"] > 0, res["hp_ipl_legal"] / res["hp_legal"], 0.0)
     res["flag_format_dep"] = (res["hp_ipl_share"] > 0.85) | (res["hp_ipl_share"] < 0.15)
     res["hp_ipl_trsa24"] = np.where(res["hp_ipl_legal"] > 0, 24.0 * res["hp_ipl_trsa"] / res["hp_ipl_legal"], np.nan)
     res["hp_t20i_trsa24"] = np.where(res["hp_t20i_legal"] > 0, 24.0 * res["hp_t20i_trsa"] / res["hp_t20i_legal"], np.nan)
 
+    # 5-Pillar Composite scoring within eligible pool
     elig = res[res["eligible"]].copy()
     if len(elig) > 1:
-        z_rsae = zscore(elig["hp_total_rsae24_eb"])
+        z_val = zscore(elig["hp_total_rsae24_eb"])
+        z_exec = 0.40 * zscore(elig["pbc_eb"]) + 0.35 * zscore(elig["boundary_suppression"]) + 0.25 * zscore(elig["wicket_sr24"])
+        z_away = zscore(elig["delta_away_home"])
         z_del = zscore(elig["delta_own_rsae24"])
         z_con = 0.5 * zscore(elig["pos_match_rate_eb"]) + 0.5 * zscore(elig["pm_sharpe_eb"])
-        z_disc_wpa = 0.5 * zscore(elig["hp_disc24_eb"]) + 0.5 * zscore(elig["hp_wpa24_eb"])
-        w1, w2, w3, w4 = weights
-        elig["z_rsae24"] = z_rsae
+
+        if len(weights) == 5:
+            w_val, w_exec, w_away, w_del, w_con = weights
+        else:
+            w_val, w_del, w_con, _ = weights
+            w_val = w_val * 0.8
+            w_exec = 0.20
+            w_away = 0.15
+
+        elig["z_value"] = z_val
+        elig["z_exec"] = z_exec
+        elig["z_away"] = z_away
         elig["z_delta"] = z_del
         elig["z_consistency"] = z_con
-        elig["z_disc_wpa"] = z_disc_wpa
-        elig["composite_z"] = w1 * z_rsae + w2 * z_del + w3 * z_con + w4 * z_disc_wpa
+        elig["composite_z"] = (
+            w_val * z_val
+            + w_exec * z_exec
+            + w_away * z_away
+            + w_del * z_del
+            + w_con * z_con
+        )
         elig["pressure_score_0_100"] = 50.0 + 15.0 * elig["composite_z"]
         elig["rank_eb"] = elig["composite_z"].rank(ascending=False, method="min").astype(int)
         elig["rank_raw_trsa24"] = elig["hp_total_rsae24_raw"].rank(ascending=False, method="min").astype(int)
-        for col in ["z_rsae24", "z_delta", "z_consistency", "z_disc_wpa", "composite_z", "pressure_score_0_100", "rank_eb", "rank_raw_trsa24"]:
+        for col in [
+            "z_value", "z_exec", "z_away", "z_delta", "z_consistency",
+            "composite_z", "pressure_score_0_100", "rank_eb", "rank_raw_trsa24"
+        ]:
             res[col] = np.nan
             res.loc[elig.index, col] = elig[col]
 
@@ -581,6 +760,8 @@ def build_bowling_ratings(
 
 def main() -> None:
     df = pd.read_csv("data/interim/ball_pressure.csv.gz", low_memory=False)
+    matches_df = pd.read_csv("data/raw/matches.csv") if Path("data/raw/matches.csv").exists() else None
+    df = enrich_context_and_composure(df, matches_df)
     df = canon_player_ids(df, merge_split_ids=True)
     df["fmt"] = assign_format_bucket(df)
 
@@ -613,19 +794,19 @@ def main() -> None:
     elig_scan_df = pd.DataFrame(bat_elig_scan + bwl_elig_scan)
     elig_scan_df.to_csv("outputs/eligibility_scan.csv", index=False)
 
-    # Primary ratings (C03 under D1=bye1_repaired: LI >= 75th pct, >=180 HP balls bat / >=150 HP legal bowl, >=12 HP matches, active >=2025, 50/15/25/10)
+    # Primary ratings (C03 under D1=bye1_repaired: LI >= 75th pct, >=180 HP balls bat / >=150 HP legal bowl, >=12 HP matches, active >=2025, 40/20/15/15/10 5-pillar composite)
     bat_df, bat_meta = build_batting_ratings(clean, hp_col="is_hp_75", min_hp_balls=180, min_hp_matches=12, recent_cutoff_year=2025)
     bwl_df, bwl_meta = build_bowling_ratings(clean, hp_col="is_hp_75", min_hp_balls=150, min_hp_matches=12, recent_cutoff_year=2025)
 
-    # Quick +-10 weight sensitivity check in Stage 3 (including C12 40/15/35/10 consistency tilt)
+    # 5-Pillar weight sensitivity variations in Stage 3
     weight_configs = [
-        ("base_50_15_25_10", (0.50, 0.15, 0.25, 0.10)),
-        ("rae_60_10_20_10", (0.60, 0.10, 0.20, 0.10)),
-        ("C12_con_40_15_35_10", (0.40, 0.15, 0.35, 0.10)),
-        ("wpa_45_15_20_20", (0.45, 0.15, 0.20, 0.20)),
+        ("base_40_20_15_15_10", (0.40, 0.20, 0.15, 0.15, 0.10)),
+        ("value_tilt_50_15_15_10_10", (0.50, 0.15, 0.15, 0.10, 0.10)),
+        ("exec_tilt_35_25_15_15_10", (0.35, 0.25, 0.15, 0.15, 0.10)),
+        ("consist_tilt_35_15_15_15_20", (0.35, 0.15, 0.15, 0.15, 0.20)),
     ]
     for cname, wts in weight_configs:
-        if cname == "base_50_15_25_10":
+        if cname == "base_40_20_15_15_10":
             continue
         tb, _ = build_batting_ratings(clean, hp_col="is_hp_75", min_hp_balls=180, min_hp_matches=12, recent_cutoff_year=2025, weights=wts)
         tw, _ = build_bowling_ratings(clean, hp_col="is_hp_75", min_hp_balls=150, min_hp_matches=12, recent_cutoff_year=2025, weights=wts)
@@ -658,12 +839,12 @@ def main() -> None:
     fig.savefig(fig_dir / "eligibility_elbow.png", bbox_inches="tight")
     plt.close(fig)
 
-    print("\n--- TOP 15 BATTERS UNDER PRESSURE (C03 Primary: D1=bye1_repaired, LI >= 75th pct) ---")
-    cols_b = ["rank_eb", "player_id", "player_name", "hp_matches", "hp_bf", "hp_runs", "hp_sr", "hp_rae100_raw", "hp_rae100_eb", "delta_own_rae100", "pos_match_rate_eb", "hp_wpa100_eb", "composite_z", "hp_ipl_share"]
+    print("\n--- TOP 15 BATTERS UNDER PRESSURE (5-PILLAR ELITE SPEC) ---")
+    cols_b = ["rank_eb", "player_id", "player_name", "hp_matches", "hp_bf", "hp_runs", "hp_sr", "hp_rae100_raw", "hp_rae100_eb", "delta_own_rae100", "delta_away_home", "srr", "bpr", "pressure_score_0_100"]
     print(bat_df[bat_df["eligible"]].head(15)[cols_b].round(3).to_string(index=False))
 
-    print("\n--- TOP 15 BOWLERS UNDER PRESSURE (C03 Primary: D1=bye1_repaired, LI >= 75th pct) ---")
-    cols_w = ["rank_eb", "player_id", "player_name", "primary_pace_spin", "hp_matches", "hp_legal", "hp_wkts", "hp_econ", "hp_total_rsae24_raw", "hp_total_rsae24_eb", "delta_own_rsae24", "pos_match_rate_eb", "hp_wpa24_eb", "composite_z", "hp_ipl_share"]
+    print("\n--- TOP 15 BOWLERS UNDER PRESSURE (5-PILLAR ELITE SPEC) ---")
+    cols_w = ["rank_eb", "player_id", "player_name", "primary_pace_spin", "hp_matches", "hp_legal", "hp_wkts", "hp_econ", "hp_total_rsae24_raw", "hp_total_rsae24_eb", "delta_own_rsae24", "delta_away_home", "pbc_eb", "pressure_score_0_100"]
     print(bwl_df[bwl_df["eligible"]].head(15)[cols_w].round(3).to_string(index=False))
 
 

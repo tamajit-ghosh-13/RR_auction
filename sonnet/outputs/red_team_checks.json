@@ -17,37 +17,37 @@
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 7216,
-      "player_name": "Prabhsimran Singh",
-      "hp_bf": 408,
-      "hp_runs": 663,
-      "hp_outs": 19,
+      "player_id": 4708,
+      "player_name": "Rinku Singh",
+      "hp_bf": 260,
+      "hp_runs": 430,
+      "hp_outs": 7,
       "status": "EXACT_MATCH"
     }
   ],
   "bowling_red_team": [
     {
-      "player_id": 1566,
-      "player_name": "Mohammed Shami",
-      "hp_legal": 466,
-      "hp_runs": 603,
-      "hp_wkts": 31,
+      "player_id": 4900,
+      "player_name": "Wanindu Hasaranga",
+      "hp_legal": 409,
+      "hp_runs": 552,
+      "hp_wkts": 32,
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 4692,
-      "player_name": "Lockie Ferguson",
-      "hp_legal": 291,
-      "hp_runs": 389,
-      "hp_wkts": 22,
+      "player_id": 4219,
+      "player_name": "Krunal Pandya",
+      "hp_legal": 370,
+      "hp_runs": 434,
+      "hp_wkts": 18,
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 4722,
-      "player_name": "Rashid Khan",
-      "hp_legal": 640,
-      "hp_runs": 725,
-      "hp_wkts": 33,
+      "player_id": 6450,
+      "player_name": "Mujeeb Ur Rahman",
+      "hp_legal": 259,
+      "hp_runs": 284,
+      "hp_wkts": 15,
       "status": "EXACT_MATCH"
     }
   ]

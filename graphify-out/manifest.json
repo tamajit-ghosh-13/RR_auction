@@ -66,15 +66,15 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/red_team_checks.json": {
-    "mtime": 1794501536.4858541,
-    "seen": 1794501721.574025,
-    "ast_hash": "666d5b6602f2d64f92d52ac2383c37c1",
+    "mtime": 1794591586.3818147,
+    "seen": 1794591997.320072,
+    "ast_hash": "ea46ab44296250a9c7a10b943a37ac1e",
     "semantic_hash": ""
   },
   "sonnet/outputs/shrinkage_params.json": {
-    "mtime": 1794501475.357345,
-    "seen": 1794501721.574027,
-    "ast_hash": "cb572a3ff9188ec092f70ee3e9c0cdd1",
+    "mtime": 1794591449.4731758,
+    "seen": 1794591997.320073,
+    "ast_hash": "5332b3ec46f7d9c8e585370f29e4e21b",
     "semantic_hash": ""
   },
   "sonnet/outputs/stage1_summary.json": {
@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "sonnet/scripts/common.py": {
-    "mtime": 1794496136.2409303,
-    "seen": 1794496796.198453,
-    "ast_hash": "1f949e660c273c016021ab14f2e4ec6a",
+    "mtime": 1794590574.6719785,
+    "seen": 1794591997.320077,
+    "ast_hash": "82144f3b3e98771906b541e339fe2e35",
     "semantic_hash": ""
   },
   "sonnet/scripts/stage1_profile.py": {
@@ -114,9 +114,9 @@
     "semantic_hash": ""
   },
   "sonnet/scripts/stage3_ratings.py": {
-    "mtime": 1794501414.6946704,
-    "seen": 1794501721.574042,
-    "ast_hash": "13fa0545e5c6e900fe68f669ee0d9018",
+    "mtime": 1794591373.7029977,
+    "seen": 1794591997.3200798,
+    "ast_hash": "b027a7f8547acbc1ea7e8260b2c29041",
     "semantic_hash": ""
   },
   "sonnet/scripts/stage4_validation.py": {
@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "sonnet/scripts/stage5_report_charts.py": {
-    "mtime": 1794496565.6191852,
-    "seen": 1794496796.198456,
-    "ast_hash": "19640c27a8cb8a59b5928380602e3ade",
+    "mtime": 1794591694.9745939,
+    "seen": 1794591997.320081,
+    "ast_hash": "c2ceb31d6937e5bbc33f642f01388c65",
     "semantic_hash": ""
   },
   "argon/AGENTS.md": {
@@ -270,9 +270,9 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/DECISIONS.md": {
-    "mtime": 1794501644.0248313,
-    "seen": 1794501721.574094,
-    "ast_hash": "a4de90cb3ebce6c7935e3536a3c02ef8",
+    "mtime": 1794591784.146505,
+    "seen": 1794591997.320099,
+    "ast_hash": "c557d25f20c509e6b758e67a0a9d5f93",
     "semantic_hash": ""
   },
   "sonnet/outputs/analysts_notes.md": {
@@ -288,15 +288,15 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/batting_top10.md": {
-    "mtime": 1794501649.5447874,
-    "seen": 1794501721.5740979,
-    "ast_hash": "72322304f736c4a2e8b6c017a17336ee",
+    "mtime": 1794591808.895528,
+    "seen": 1794591997.3201,
+    "ast_hash": "d3e1f57365964ab80ac2cf016af04bce",
     "semantic_hash": ""
   },
   "sonnet/outputs/bowling_top10.md": {
-    "mtime": 1794501652.6510882,
-    "seen": 1794501721.5740988,
-    "ast_hash": "7202e386c7503c1963a8750a371c2ffd",
+    "mtime": 1794591824.6054468,
+    "seen": 1794591997.320101,
+    "ast_hash": "3d1db8569601368125918998483a2416",
     "semantic_hash": ""
   },
   "sonnet/outputs/data_engineer_notes.md": {
@@ -336,15 +336,15 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/report.md": {
-    "mtime": 1794501707.4467046,
-    "seen": 1794501721.57411,
-    "ast_hash": "ef917357f41d0c1e58fd2fe7db5bb2bf",
+    "mtime": 1794591884.6882482,
+    "seen": 1794591997.320105,
+    "ast_hash": "88d95332c6497a27dfb851d36432648c",
     "semantic_hash": ""
   },
   "sonnet/outputs/robustness_notes.md": {
-    "mtime": 1794501698.4266036,
-    "seen": 1794501721.574111,
-    "ast_hash": "c73f3d087e9f40fceaf710af3181933f",
+    "mtime": 1794591945.5293076,
+    "seen": 1794591997.320106,
+    "ast_hash": "467ef93631cb96167762679ad8ec0b2a",
     "semantic_hash": ""
   },
   "sonnet/outputs/submission_checklist.md": {
@@ -354,15 +354,15 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/top10_match_audit.md": {
-    "mtime": 1794501536.3364677,
-    "seen": 1794501721.5741131,
-    "ast_hash": "02cb659e7a4b1613828b0f675c859a75",
+    "mtime": 1794591586.2030156,
+    "seen": 1794591997.320107,
+    "ast_hash": "72f121385c7f4ade5e538f3e80a6bc4c",
     "semantic_hash": ""
   },
   "sonnet/outputs/validator_notes.md": {
-    "mtime": 1794501701.3836398,
-    "seen": 1794501721.574114,
-    "ast_hash": "328a8b3e5d6c71c11dfe8f37545652ab",
+    "mtime": 1794591921.238925,
+    "seen": 1794591997.320107,
+    "ast_hash": "ff2f19c384666909596a597aea9110b4",
     "semantic_hash": ""
   },
   "argon/Round 1 Problem Statement _ SupeRR Selector Season 2.docx.pdf": {
@@ -402,21 +402,21 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/component_bars_top10.png": {
-    "mtime": 1794501549.1436505,
-    "seen": 1794501721.5741398,
-    "ast_hash": "bea5c3eec621dcac6101f2fb7aa6a0f3",
+    "mtime": 1794591720.6302843,
+    "seen": 1794591997.3201122,
+    "ast_hash": "fc65f915be2edd04b976d02ea3fe65a0",
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/eligibility_elbow.png": {
-    "mtime": 1794501475.4811811,
-    "seen": 1794501721.574141,
+    "mtime": 1794591449.606994,
+    "seen": 1794591997.3201122,
     "ast_hash": "d756cf3d301d22f73ae478cccaea438d",
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/ipl_vs_t20i_contrib.png": {
-    "mtime": 1794501549.246209,
-    "seen": 1794501721.574142,
-    "ast_hash": "9e1609e8e95e091080520fd0a39042a2",
+    "mtime": 1794591720.7304506,
+    "seen": 1794591997.320113,
+    "ast_hash": "a72c533d281242ad6ee1cdefdd4fe0fe",
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/li_distribution.png": {
@@ -432,15 +432,15 @@
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/robustness_rank_ci.png": {
-    "mtime": 1794501536.4853454,
-    "seen": 1794501721.574146,
-    "ast_hash": "e37b1dc770a46a1bf464ac6b784cc543",
+    "mtime": 1794591586.3812218,
+    "seen": 1794591997.320114,
+    "ast_hash": "752b71b27d143bce99ec88b66359d34c",
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/shrinkage_before_after.png": {
-    "mtime": 1794501549.004348,
-    "seen": 1794501721.5741482,
-    "ast_hash": "505586948e4726d2f407e77e0d865096",
+    "mtime": 1794591720.4912617,
+    "seen": 1794591997.3201149,
+    "ast_hash": "4731642b0b3defe0ee8aef5faf23d989",
     "semantic_hash": ""
   },
   "sonnet/outputs/figures/wp_calibration.png": {
@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "sonnet/scripts/run_gate_combinations.py": {
-    "mtime": 1794501504.4923286,
-    "seen": 1794501721.574038,
-    "ast_hash": "d2ffcae5f1932370e23049e5c3eb09a7",
+    "mtime": 1794591644.8340354,
+    "seen": 1794591997.3200781,
+    "ast_hash": "640dae410dfcdf0f97a6216a950031d8",
     "semantic_hash": ""
   },
   "sonnet/outputs/gate_combinations/COMPARISON.md": {
@@ -462,9 +462,9 @@
     "semantic_hash": ""
   },
   "sonnet/scripts/build_master_csv.py": {
-    "mtime": 1794500686.3591228,
-    "seen": 1794500696.6087759,
-    "ast_hash": "16f453f9f7933f125544b365569db651",
+    "mtime": 1794591658.6387038,
+    "seen": 1794591997.320076,
+    "ast_hash": "527bc2fff201f7f3e134587d91adf346",
     "semantic_hash": ""
   },
   "sonnet/scripts/run_bye1_final.py": {

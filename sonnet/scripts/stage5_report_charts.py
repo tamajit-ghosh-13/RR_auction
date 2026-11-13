@@ -48,39 +48,43 @@ def main() -> None:
     fig.savefig(fig_dir / "shrinkage_before_after.png", bbox_inches="tight")
     plt.close(fig)
 
-    # 2. Component contributions for Top 10 Batters & Top 10 Bowlers
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
+    # 2. Component contributions for Top 10 Batters & Top 10 Bowlers (5-Pillar Architecture)
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
     tb10 = bat[bat["eligible"]].head(10).iloc[::-1]
     y = np.arange(len(tb10))
-    c1 = 0.50 * tb10["z_rae100"]
-    c2 = 0.15 * tb10["z_delta"]
-    c3 = 0.25 * tb10["z_consistency"]
-    c4 = 0.10 * tb10["z_wpa100"]
-    axes[0].barh(y - 0.18, c1, height=0.22, label="50% EB RAE100", color="#2b6cb0")
-    axes[0].barh(y, c3, height=0.22, label="25% Consistency", color="#2f855a")
-    axes[0].barh(y + 0.18, c2 + c4, height=0.22, label="15% Delta + 10% WPA", color="#dd6b20")
+    c1 = 0.40 * tb10["z_value"]
+    c2 = 0.20 * tb10["z_exec"]
+    c3 = 0.15 * tb10["z_away"]
+    c4 = 0.15 * tb10["z_delta"]
+    c5 = 0.10 * tb10["z_consistency"]
+    axes[0].barh(y - 0.24, c1, height=0.18, label="40% EB Shrunk Value", color="#2b6cb0")
+    axes[0].barh(y - 0.08, c2, height=0.18, label="20% Technical Execution (SRR/DBA/BPR)", color="#805ad5")
+    axes[0].barh(y + 0.08, c3 + c4, height=0.18, label="15% Away Delta + 15% Own Lift", color="#dd6b20")
+    axes[0].barh(y + 0.24, c5, height=0.18, label="10% Match Consistency", color="#2f855a")
     axes[0].set_yticks(y)
     axes[0].set_yticklabels([f"#{int(r.rank_eb)} {r.player_name}" for _, r in tb10.iterrows()], fontsize=8.5)
     axes[0].set_xlabel("Weighted Z-Score Contribution")
-    axes[0].set_title("Top 10 Batters — Composite Component Breakdown")
+    axes[0].set_title("Top 10 Batters — 5-Pillar Component Breakdown")
     axes[0].axvline(0, color="k", lw=0.7)
-    axes[0].legend(fontsize=8)
+    axes[0].legend(fontsize=7.5, loc="lower right")
 
     tw10 = bwl[bwl["eligible"]].head(10).iloc[::-1]
     y2 = np.arange(len(tw10))
-    w1 = 0.50 * tw10["z_rsae24"]
-    w2 = 0.15 * tw10["z_delta"]
-    w3 = 0.25 * tw10["z_consistency"]
-    w4 = 0.10 * tw10["z_disc_wpa"]
-    axes[1].barh(y2 - 0.18, w1, height=0.22, label="50% EB Total RSAE24", color="#2b6cb0")
-    axes[1].barh(y2, w3, height=0.22, label="25% Consistency", color="#2f855a")
-    axes[1].barh(y2 + 0.18, w2 + w4, height=0.22, label="15% Delta + 10% Disc/WPA", color="#dd6b20")
+    w1 = 0.40 * tw10["z_value"]
+    w2 = 0.20 * tw10["z_exec"]
+    w3 = 0.15 * tw10["z_away"]
+    w4 = 0.15 * tw10["z_delta"]
+    w5 = 0.10 * tw10["z_consistency"]
+    axes[1].barh(y2 - 0.24, w1, height=0.18, label="40% EB Shrunk Value", color="#2b6cb0")
+    axes[1].barh(y2 - 0.08, w2, height=0.18, label="20% PBC & Execution (PBC/BS/WSR)", color="#805ad5")
+    axes[1].barh(y2 + 0.08, w3 + w4, height=0.18, label="15% Away Delta + 15% Own Lift", color="#dd6b20")
+    axes[1].barh(y2 + 0.24, w5, height=0.18, label="10% Match Consistency", color="#2f855a")
     axes[1].set_yticks(y2)
     axes[1].set_yticklabels([f"#{int(r.rank_eb)} {r.player_name}" for _, r in tw10.iterrows()], fontsize=8.5)
     axes[1].set_xlabel("Weighted Z-Score Contribution")
-    axes[1].set_title("Top 10 Bowlers — Composite Component Breakdown")
+    axes[1].set_title("Top 10 Bowlers — 5-Pillar Component Breakdown")
     axes[1].axvline(0, color="k", lw=0.7)
-    axes[1].legend(fontsize=8)
+    axes[1].legend(fontsize=7.5, loc="lower right")
     fig.tight_layout()
     fig.savefig(fig_dir / "component_bars_top10.png", bbox_inches="tight")
     plt.close(fig)
