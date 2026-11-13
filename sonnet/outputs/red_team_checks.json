@@ -1,53 +1,53 @@
 {
   "batting_red_team": [
     {
-      "player_id": 4708,
-      "player_name": "Rinku Singh",
-      "hp_bf": 123,
-      "hp_runs": 232,
-      "hp_outs": 2,
+      "player_id": 50284,
+      "player_name": "Vaibhav Sooryavanshi",
+      "hp_bf": 198,
+      "hp_runs": 476,
+      "hp_outs": 6,
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 2101,
-      "player_name": "Quinton de Kock",
-      "hp_bf": 165,
-      "hp_runs": 286,
-      "hp_outs": 10,
+      "player_id": 4260,
+      "player_name": "Heinrich Klaasen",
+      "hp_bf": 224,
+      "hp_runs": 399,
+      "hp_outs": 9,
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 23450,
-      "player_name": "Sai Sudharsan",
-      "hp_bf": 200,
-      "hp_runs": 310,
-      "hp_outs": 7,
+      "player_id": 7216,
+      "player_name": "Prabhsimran Singh",
+      "hp_bf": 408,
+      "hp_runs": 663,
+      "hp_outs": 19,
       "status": "EXACT_MATCH"
     }
   ],
   "bowling_red_team": [
     {
-      "player_id": 830,
-      "player_name": "Josh Hazlewood",
-      "hp_legal": 175,
-      "hp_runs": 246,
-      "hp_wkts": 18,
+      "player_id": 1566,
+      "player_name": "Mohammed Shami",
+      "hp_legal": 466,
+      "hp_runs": 603,
+      "hp_wkts": 31,
       "status": "EXACT_MATCH"
     },
     {
-      "player_id": 1612,
-      "player_name": "Yuzvendra Chahal",
-      "hp_legal": 233,
-      "hp_runs": 327,
-      "hp_wkts": 18,
+      "player_id": 4692,
+      "player_name": "Lockie Ferguson",
+      "hp_legal": 291,
+      "hp_runs": 389,
+      "hp_wkts": 22,
       "status": "EXACT_MATCH"
     },
     {
       "player_id": 4722,
       "player_name": "Rashid Khan",
-      "hp_legal": 297,
-      "hp_runs": 345,
-      "hp_wkts": 20,
+      "hp_legal": 640,
+      "hp_runs": 725,
+      "hp_wkts": 33,
       "status": "EXACT_MATCH"
     }
   ]

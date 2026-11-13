@@ -1,18 +1,18 @@
-# Top 10 Batters Under Pressure — `sonnet` Autonomous Run
+# Top 10 Batters Under Pressure — `C03` Primary (`D1 = bye1_repaired`) + 5-Combo Confirmation
 
-Primary spec: `LI >= 90th pct`, `min_hp_balls = 120`, `min_hp_matches = 10`, `last_year >= 2025` (`32` eligible), opposition-adjusted EB-shrunk (`k = 206.0`), weights `50% RAE100 / 15% Own-Delta / 25% Consistency / 10% WPA100`.
+Primary spec: `D1 = bye1_repaired`, `LI >= 75th pct`, `min_hp_balls = 180`, `min_hp_matches = 12`, `last_year >= 2025` (`83` eligible batters), opposition-adjusted EB-shrunk (`k = 180.9` balls), weights `50% RAE100 / 15% Own-Delta / 25% Consistency / 10% WPA100`. Confirmed across the 5 `bye1_repaired` surviving combinations `{C01, C03, C04, C11, C12}`.
 
-| Rank | `player_id` | Player | HP Matches | HP BF | Runs | HP SR | Raw RAE100 | EB RAE100 | Own Delta | Pos Match EB | EB WPA100 | Score (0-100) | IPL Share |
-|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 4708 | Rinku Singh | 15 | 123 | 232 | 188.6 | +48.3 | +22.8 | +22.7 | 0.727 | +1.29 | 81.3 | 87.8% |
-| 2 | 6819 | Yashasvi Jaiswal | 27 | 194 | 339 | 174.7 | +35.6 | +21.1 | +11.7 | 0.651 | +0.06 | 71.3 | 89.7% |
-| 3 | 6281 | Abhishek Sharma | 31 | 181 | 325 | 179.6 | +43.0 | +24.1 | -18.8 | 0.688 | +0.49 | 69.0 | 72.9% |
-| 4 | 3647 | Shreyas Iyer | 21 | 194 | 317 | 163.4 | +18.4 | +12.8 | +3.3 | 0.664 | +1.67 | 64.3 | 85.1% |
-| 5 | 2101 | Quinton de Kock | 18 | 165 | 286 | 173.3 | +28.2 | +16.7 | +9.6 | 0.540 | +0.31 | 63.6 | 53.9% |
-| 6 | 1699 | Suryakumar Yadav | 25 | 181 | 310 | 171.3 | +28.5 | +17.3 | -8.3 | 0.531 | +0.75 | 60.7 | 53.0% |
-| 7 | 2367 | Travis Head | 16 | 123 | 211 | 171.5 | +31.5 | +16.5 | -13.2 | 0.540 | +1.53 | 60.1 | 76.4% |
-| 8 | 4823 | Washington Sundar | 10 | 160 | 228 | 142.5 | +5.5 | +6.6 | +16.7 | 0.545 | +1.80 | 57.9 | 63.8% |
-| 9 | 7544 | Venkatesh Iyer | 11 | 148 | 215 | 145.3 | +15.3 | +10.8 | +1.6 | 0.604 | -0.01 | 56.3 | 95.3% |
-| 10 | 23450 | Sai Sudharsan | 16 | 200 | 310 | 155.0 | +6.5 | +7.0 | +8.7 | 0.593 | +1.13 | 54.8 | 100.0% |
+| Rank | `player_id` | Player | 5-Combo Top10 | 1000-Boot P(T10) | HP Matches | HP BF | HP SR | Raw RAE100 | EB RAE100 | Own Delta | Pos Match EB | EB WPA100 | Score (0-100) | Flags (`1-Match` / `Format IPL%`) |
+|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 1 | 50284 | **Vaibhav Sooryavanshi** | 3/5 | 98.0% | 22 | 198 | 240.4 | +94.0 | +52.1 | +10.6 | 0.752 | +0.54 | 92.7 | Format (`88.9%` IPL) |
+| 2 | 1699 | **Suryakumar Yadav** | 4/5 | 92.0% | 50 | 628 | 174.5 | +34.4 | +28.1 | +4.6 | 0.746 | +1.22 | 75.1 | None (`58.0%` IPL) |
+| 3 | 25669 | **Priyansh Arya** | 3/5 | 64.0% | 22 | 207 | 189.4 | +53.6 | +31.5 | +0.3 | 0.681 | +0.93 | 73.1 | Single-match (`47.9%`), Format (`100%` IPL) |
+| 4 | 2367 | **Travis Head** | 4/5 | 71.1% | 43 | 340 | 180.9 | +41.9 | +29.5 | +3.6 | 0.616 | +1.21 | 73.0 | None (`62.9%` IPL) |
+| 5 | 4260 | **Heinrich Klaasen** | 4/5 | 59.9% | 22 | 224 | 178.1 | +37.7 | +23.6 | +5.2 | 0.668 | +1.62 | 71.0 | Format (`90.6%` IPL) |
+| 6 | 6281 | **Abhishek Sharma** | 4/5 | 70.0% | 81 | 607 | 176.8 | +39.3 | +31.7 | -12.8 | 0.678 | +0.48 | 70.0 | None (`67.5%` IPL) |
+| 7 | 4708 | **Rinku Singh** | 4/5 | 57.2% | 20 | 260 | 165.4 | +21.6 | +15.3 | +15.2 | 0.761 | +0.91 | 68.5 | Format (`87.3%` IPL) |
+| 8 | 3916 | **Jitesh Sharma** | 3/5 | 60.5% | 30 | 303 | 160.7 | +28.3 | +20.0 | +16.0 | 0.679 | +0.61 | 68.1 | Format (`97.7%` IPL) |
+| 9 | 6819 | **Yashasvi Jaiswal** | 4/5 | 51.7% | 58 | 599 | 163.1 | +24.7 | +20.4 | +14.0 | 0.653 | +0.22 | 65.7 | Format (`92.0%` IPL) |
+| 10 | 7216 | **Prabhsimran Singh** | 2/5 | 38.4% | 39 | 408 | 162.5 | +22.8 | +17.7 | -0.4 | 0.630 | +1.06 | 62.3 | Format (`100%` IPL) |
 
-*Format-dependence flags (`IPL Share > 85%`)*: Rinku Singh (`87.8%`), Yashasvi Jaiswal (`89.7%`), Shreyas Iyer (`85.1%`), Venkatesh Iyer (`95.3%`), Sai Sudharsan (`100.0%`). Full ±10 weight sensitivity and 1,000-match bootstrap CIs are in `outputs/batting_ratings.csv` and `outputs/final_rankings.csv`.
+*Note on Challengers & Flags*: Every `4/5` consensus batter across `{C01, C03, C04, C11, C12}` (`Suryakumar Yadav`, `Travis Head`, `Heinrich Klaasen`, `Abhishek Sharma`, `Rinku Singh`, `Yashasvi Jaiswal`) AND every `3/5` consensus batter (`Vaibhav Sooryavanshi`, `Priyansh Arya`, `Jitesh Sharma`) appears directly in `C03`'s Top 9. Slot `#10` goes to `Prabhsimran Singh` (`2/5` in `{C03, C12}` `#10`, `#11` in `C04`, `38.4%` P(T10), zero single-match dependency), just ahead of `#11 Nicholas Pooran` (`1/5`, `28.2%`, `0` flags), `#16 Shreyas Iyer` (`2/5`, `18.8%`, `single_match=True`), and `#17 Tim David` (`1/5`, `18.7%`, `0` flags). Single-match flag applies strictly to `#3 Priyansh Arya` (`47.9%` of HP RAE from `match_id=40715`, `2025-04-08`). Format dependence (`>85%` IPL) applies to `Priyansh Arya`, `Prabhsimran Singh`, `Jitesh Sharma`, `Yashasvi Jaiswal`, `Heinrich Klaasen`, `Vaibhav Sooryavanshi`, and `Rinku Singh`.

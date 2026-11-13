@@ -1,23 +1,21 @@
-# Shrinkage & Eligibility Specification (`sonnet`)
+# Shrinkage & Eligibility Specification (`C03` Primary: `D1 = bye1_repaired`, `LI >= 75th pct`)
 
 ## 1. Empirical Bayes Shrinkage Parameters (`outputs/shrinkage_params.json`)
 Estimated via one-way random-effects variance decomposition (`k = sigma2_within / sigma2_between`) across players with `>= 8` high-pressure matches using winsorised (1st–99th pct) per-match rates (`m_bf >= 4` batters, `m_leg >= 4` bowlers):
 
-- **Batting (`HP RAE100`)**:
-  - `sigma2_within_match = 4064.25`, `sigma2_between_match = 223.59`, winsor bounds `[-128.59, 206.45]`.
-  - Optimal EB ball-equivalent shrinkage constant: **`k = 206.0` balls** (prior mean `mu = +7.51 RAE100` across `hp_bf >= 60` pool; non-pressure `k = 206.0`, `mu = +7.76`).
-  - Beta-Binomial positive-match consistency prior: `m0 = 8` matches around `mu_pos = 0.5334`.
-- **Bowling (`HP Total RSAE24` = runs saved + `12 * WAE`)**:
-  - `sigma2_within_match = 881.46`, `sigma2_between_match = 14.50`, winsor bounds `[-66.61, 100.99]`.
-  - Optimal EB ball-equivalent shrinkage constant: **`k = 199.6` legal balls** (prior mean `mu = -0.55 Total RSAE24` across `hp_legal >= 60` pool; non-pressure `mu = -1.03`).
-  - Beta-Binomial positive-match consistency prior: `m0 = 8` matches around `mu_pos = 0.4210`.
+- **Batting (`HP RAE100`, `LI >= 75th pct`)**:
+  - `sigma2_within_match = 3489.03`, `sigma2_between_match = 247.67`, winsor bounds `[-124.06, 189.47]`.
+  - Optimal EB ball-equivalent shrinkage constant: **`k = 180.9` balls** (prior mean `mu = +6.17 RAE100` across `hp_bf >= 60` pool; non-pressure prior `mu = +6.77`).
+  - Beta-Binomial positive-match consistency prior: `m0 = 8` matches around `mu_pos = 0.5046`.
+- **Bowling (`HP Total RSAE24` = runs saved + `12 * WAE`, `LI >= 75th pct`)**:
+  - `sigma2_within_match = 692.46`, `sigma2_between_match = 21.54`, winsor bounds `[-61.67, 81.99]`.
+  - Optimal EB ball-equivalent shrinkage constant: **`k = 242.0` legal balls** (prior mean `mu = -1.33 Total RSAE24` across `hp_legal >= 60` pool; non-pressure prior `mu = -1.41`).
+  - Beta-Binomial positive-match consistency prior: `m0 = 8` matches around `mu_pos = 0.4073`.
 
-## 2. Eligibility Thresholds & Recent Activity Curve (`outputs/eligibility_scan.csv`)
-Pool size (`n_eligible`) across `min_hp_balls` (with `min_hp_matches >= 10` and `last_year >= 2025`):
-- **Batters**: `60b -> 72`, `80b -> 60`, `100b -> 45`, **`120b -> 32` (Default)**, `150b -> 24`, `180b -> 15`.
-- **Bowlers**: `60b -> 79`, `80b -> 71`, **`100b -> 59` (Default)**, `120b -> 45`, `150b -> 26`, `180b -> 15`.
-- **Recent-activity filter (`last_year >= 2025`)**: Removes retired/inactive players before IPL 2026–27 auction decisions (e.g., excludes Mohammad Rizwan 245 HP balls last_year=2024, Matthew Wade 127 HP balls last_year=2024, Tim Southee 107 HP balls last_year=2024).
-- **Near-miss watch-list (active 2025–26, just below `120` / `100` balls)**:
-  - *Batters*: Prabhsimran Singh (`119` balls, EB `+16.73`), Rovman Powell (`113` balls, EB `+18.27`), Heinrich Klaasen (`96` balls, EB `+14.89`).
-  - *Bowlers*: Abrar Ahmed (`99` balls, `9` matches), Mohsin Khan (`95` balls, EB `+8.02`), Patrick Cummins (`93` balls, EB `+0.48`).
-- Cutoff sensitivity (`80b/8m`, `150b/12m`, and `all 2022–26`) is quantified in Stage 4 (`outputs/robustness_summary.csv`). See `outputs/figures/eligibility_elbow.png`.
+## 2. Eligibility Thresholds & Pool Depth (`outputs/eligibility_scan.csv`)
+Pool size (`n_eligible`) across `min_hp_balls` with `min_hp_matches >= 12` and `last_year >= 2025` under `is_hp_75`:
+- **Batters**: `100b -> 118`, `140b -> 97`, `160b -> 86`, **`180b -> 83` (`C03` Primary)**, `200b -> 69`, `240b -> 49`.
+- **Bowlers**: `100b -> 117`, `120b -> 108`, `140b -> 101`, **`150b -> 93` (`C03` Primary)**, `180b -> 82`, `200b -> 73`.
+- **Recent-activity filter (`last_year >= 2025`)**: Preserves active IPL 2026–27 auction and T20I selection relevance (with `2022–26` full-history alternative showing `rho = 0.9998` batters, `1.0000` bowlers on common players).
+- **Eligibility Check for Missing Stars**: Neither `Jasprit Bumrah` (`43` HP matches, `455` legal HP balls, `last_year = 2026`) nor `Matheesha Pathirana` (`20` HP matches, `207` legal HP balls, `last_year = 2026`) failed eligibility in `C03`. Both cleared the `150`-ball / `12`-match threshold easily (`eligible = True`), finishing **`#39` (`Bumrah`)** and **`#49` (`Pathirana`)** due to negative Wickets Above Expected in the `LI >= 75th pct` tier (`-0.514 WAE/24` and `-0.324 WAE/24`, i.e., `17` vs `26.75` and `13` vs `15.79` expected HP wickets respectively).
+- See `outputs/figures/eligibility_elbow.png`.

@@ -1,18 +1,18 @@
-# Top 10 Bowlers Under Pressure — `sonnet` Autonomous Run
+# Top 10 Bowlers Under Pressure — `C03` Primary (`D1 = bye1_repaired`) + 5-Combo Confirmation
 
-Primary spec: `LI >= 90th pct`, `min_hp_legal = 100`, `min_hp_matches = 10`, `last_year >= 2025` (`59` eligible), opposition-adjusted EB-shrunk (`k = 199.6`), `Total RSAE24 = Runs Saved + 12 * Wkts Above Expected per 24 legal balls`, weights `50% Total RSAE24 / 15% Own-Delta / 25% Consistency / 10% (Discipline + WPA)`.
+Primary spec: `D1 = bye1_repaired`, `LI >= 75th pct`, `min_hp_legal = 150`, `min_hp_matches = 12`, `last_year >= 2025` (`93` eligible bowlers), opposition-adjusted EB-shrunk (`k = 242.0` legal balls), `Total RSAE24 = Runs Saved + 12 * WAE`, weights `50% Total RSAE24 / 15% Own-Delta / 25% Consistency / 10% (Discipline + WPA)`. Confirmed across the 5 `bye1_repaired` surviving combinations `{C01, C03, C04, C11, C12}`.
 
-| Rank | `player_id` | Player | Pace/Spin | HP Matches | HP Legal | Wkts | HP Econ | Raw Total RSAE24 | EB Total RSAE24 | Own Delta | Pos Match EB | EB WPA24 | Score (0-100) | IPL Share |
-|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 830 | Josh Hazlewood | Pace | 21 | 175 | 18 | 8.43 | +15.10 | +6.76 | +5.93 | 0.655 | +0.06 | 81.1 | 87.4% |
-| 2 | 4219 | Krunal Pandya | Spin | 16 | 121 | 9 | 6.00 | +16.44 | +5.87 | +6.49 | 0.576 | -0.06 | 77.1 | 100.0% |
-| 3 | 29888 | Harshit Rana | Pace | 16 | 143 | 14 | 8.98 | +10.70 | +4.15 | +6.47 | 0.562 | -0.18 | 71.2 | 83.2% |
-| 4 | 2490 | Mohammad Nawaz | Spin | 13 | 146 | 11 | 6.12 | +10.82 | +4.25 | +2.27 | 0.546 | +0.06 | 69.7 | 0.0% |
-| 5 | 1612 | Yuzvendra Chahal | Spin | 25 | 233 | 18 | 8.42 | +8.85 | +4.52 | +4.74 | 0.390 | -0.28 | 66.9 | 98.3% |
-| 6 | 6256 | Varun Chakravarthy | Spin | 18 | 154 | 12 | 7.48 | +10.56 | +4.29 | -0.03 | 0.518 | -0.11 | 66.3 | 96.8% |
-| 7 | 7690 | Saim Ayub | Spin | 10 | 133 | 8 | 5.95 | +6.74 | +2.37 | +4.04 | 0.520 | +0.17 | 66.1 | 0.0% |
-| 8 | 781 | Sunil Narine | Spin | 20 | 167 | 9 | 6.50 | +8.40 | +3.53 | -0.35 | 0.494 | -0.04 | 64.9 | 100.0% |
-| 9 | 2320 | Trent Boult | Pace | 25 | 257 | 16 | 7.75 | +6.55 | +3.45 | +5.55 | 0.495 | -0.32 | 64.8 | 96.5% |
-| 10 | 4722 | Rashid Khan | Spin | 24 | 297 | 20 | 6.97 | +6.31 | +3.56 | +1.52 | 0.479 | -0.16 | 63.6 | 55.6% |
+| Rank | `player_id` | Player | Pace/Spin | 5-Combo Top10 | 1000-Boot P(T10) | HP Matches | HP Legal | Wkts | HP Econ | Raw RSAE24 | EB RSAE24 | Own Delta | Pos Match EB | Score (0-100) | Flags (`1-Match` / `Format IPL%`) |
+|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 1 | 1566 | **Mohammed Shami** | Pace | 3/5 | 76.7% | 46 | 466 | 31 | 7.76 | +8.28 | +5.00 | +6.23 | 0.568 | 79.2 | Format (`100%` IPL) |
+| 2 | 830 | **Josh Hazlewood** | Pace | 4/5 | 65.5% | 36 | 452 | 33 | 8.02 | +7.93 | +4.70 | +4.63 | 0.531 | 76.9 | None (`73.2%` IPL) |
+| 3 | 781 | **Sunil Narine** | Spin | 5/5 | 66.7% | 33 | 390 | 19 | 6.37 | +8.33 | +4.63 | +1.68 | 0.556 | 76.3 | Format (`100%` IPL) |
+| 4 | 4900 | **Wanindu Hasaranga** | Spin | 3/5 | 64.2% | 31 | 409 | 32 | 8.10 | +6.62 | +3.67 | +1.81 | 0.596 | 74.1 | None (`66.0%` IPL) |
+| 5 | 4692 | **Lockie Ferguson** | Pace | 3/5 | 55.0% | 30 | 291 | 22 | 8.02 | +8.83 | +4.22 | +6.73 | 0.492 | 73.6 | Single-match (`42.1%`) |
+| 6 | 4219 | **Krunal Pandya** | Spin | 4/5 | 43.8% | 32 | 370 | 18 | 7.04 | +5.05 | +2.53 | +3.29 | 0.533 | 69.3 | Single-match (`47.1%`), Format (`100%` IPL) |
+| 7 | 29888 | **Harshit Rana** | Pace | 3/5 | 31.2% | 26 | 285 | 22 | 8.55 | +6.52 | +2.92 | +6.05 | 0.423 | 67.0 | None (`81.1%` IPL) |
+| 8 | 6256 | **Varun Chakravarthy** | Spin | 5/5 | 33.4% | 42 | 451 | 29 | 7.70 | +6.27 | +3.61 | -0.58 | 0.483 | 66.9 | None (`77.6%` IPL) |
+| 9 | 2320 | **Trent Boult** | Pace | 4/5 | 28.0% | 52 | 532 | 27 | 7.52 | +3.90 | +2.27 | +5.21 | 0.485 | 66.7 | Format (`93.8%` IPL) |
+| 10 | 4722 | **Rashid Khan** | Spin | 3/5 | 30.7% | 48 | 640 | 33 | 6.80 | +4.04 | +2.57 | +0.63 | 0.505 | 66.0 | Single-match (`38.4%`) |
 
-*Opportunity-bias & format flags*: Krunal Pandya (`100% IPL`), Sunil Narine (`100% IPL`), Yuzvendra Chahal (`98.3% IPL`), Varun Chakravarthy (`96.8% IPL`), Trent Boult (`96.5% IPL`), and Josh Hazlewood (`87.4% IPL`) draw mostly IPL high-pressure overs; Mohammad Nawaz (`0% IPL`) and Saim Ayub (`0% IPL`) are pure T20I volume. Note Jasprit Bumrah (`181` HP legal balls) ranks `#55` strictly because he took `6` wickets vs `~10.8` expected (`econ 8.69`) inside the strict `LI >= 90th pct` tier despite dominating lower-leverage overs.
+*Unanimous 5-Combo Alignment & Missing Stars Audit*: All 10 bowlers in `C03`'s Top 10 have `top10_cnt_of_5 >= 3/5` (`5/5`: `Sunil Narine`, `Varun Chakravarthy`; `4/5`: `Josh Hazlewood`, `Krunal Pandya`, `Trent Boult`; `3/5`: `Mohammed Shami`, `Wanindu Hasaranga`, `Lockie Ferguson`, `Harshit Rana`, `Rashid Khan`), and zero bowler outside `C03` Top 10 reaches `>= 2/5` (`#11 Patrick Cummins 1/5`, `#12 Mujeeb Ur Rahman 0/5`, `#14 Saim Ayub 1/5`). `Jasprit Bumrah` (`455` legal HP balls, `eligible=True`, `#39`) and `Matheesha Pathirana` (`207` legal HP balls, `eligible=True`, `#49`) cleared eligibility easily but took fewer HP wickets than expected (`17` vs `26.75` for Bumrah, `13` vs `15.79` for Pathirana), lowering `12 * WAE` below Top-10 contention. Single-match dependence flags `Lockie Ferguson` (`42.1%`), `Krunal Pandya` (`47.1%`), and `Rashid Khan` (`38.4%`) under `D1 = bye1_repaired`; `Wanindu Hasaranga` sits at `31.2%` (`False`).

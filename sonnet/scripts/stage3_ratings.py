@@ -596,40 +596,39 @@ def main() -> None:
     # Primary clean analysis pool: IPL + T20I, non-DLS
     clean = d_mod[(d_mod["fmt"].isin(["IPL", "T20I"])) & (d_mod["dls_flag"] == 0)].copy()
 
-    # Eligibility curve sweep
-    print("\nScanning eligibility cutoffs...")
+    # Eligibility curve sweep (centered around C03 LI >= 75th pct primary spec)
+    print("\nScanning eligibility cutoffs (LI >= 75th pct)...")
     bat_elig_scan = []
-    for min_b in [60, 80, 100, 120, 150, 180]:
-        for min_m in [8, 10, 12]:
+    for min_b in [100, 140, 160, 180, 200, 240]:
+        for min_m in [10, 12, 14]:
             for rec in [2022, 2025]:
-                tmp, _ = build_batting_ratings(clean, min_hp_balls=min_b, min_hp_matches=min_m, recent_cutoff_year=rec)
+                tmp, _ = build_batting_ratings(clean, hp_col="is_hp_75", min_hp_balls=min_b, min_hp_matches=min_m, recent_cutoff_year=rec)
                 bat_elig_scan.append({"role": "batter", "min_hp_balls": min_b, "min_hp_matches": min_m, "recent_yr": rec, "n_eligible": int(tmp["eligible"].sum())})
     bwl_elig_scan = []
-    for min_b in [60, 80, 100, 120, 150, 180]:
-        for min_m in [8, 10, 12]:
+    for min_b in [100, 120, 140, 150, 180, 200]:
+        for min_m in [10, 12, 14]:
             for rec in [2022, 2025]:
-                tmp, _ = build_bowling_ratings(clean, min_hp_balls=min_b, min_hp_matches=min_m, recent_cutoff_year=rec)
+                tmp, _ = build_bowling_ratings(clean, hp_col="is_hp_75", min_hp_balls=min_b, min_hp_matches=min_m, recent_cutoff_year=rec)
                 bwl_elig_scan.append({"role": "bowler", "min_hp_balls": min_b, "min_hp_matches": min_m, "recent_yr": rec, "n_eligible": int(tmp["eligible"].sum())})
     elig_scan_df = pd.DataFrame(bat_elig_scan + bwl_elig_scan)
     elig_scan_df.to_csv("outputs/eligibility_scan.csv", index=False)
 
-    # Primary ratings (autonomous defaults: LI >= 90th pct, >=120 HP balls for bat / >=100 HP legal for bowl, >=10 HP matches, active >=2025, 50/15/25/10 weights)
-    bat_df, bat_meta = build_batting_ratings(clean, hp_col="is_hp_90", min_hp_balls=120, min_hp_matches=10, recent_cutoff_year=2025)
-    bwl_df, bwl_meta = build_bowling_ratings(clean, hp_col="is_hp_90", min_hp_balls=100, min_hp_matches=10, recent_cutoff_year=2025)
+    # Primary ratings (C03 under D1=bye1_repaired: LI >= 75th pct, >=180 HP balls bat / >=150 HP legal bowl, >=12 HP matches, active >=2025, 50/15/25/10)
+    bat_df, bat_meta = build_batting_ratings(clean, hp_col="is_hp_75", min_hp_balls=180, min_hp_matches=12, recent_cutoff_year=2025)
+    bwl_df, bwl_meta = build_bowling_ratings(clean, hp_col="is_hp_75", min_hp_balls=150, min_hp_matches=12, recent_cutoff_year=2025)
 
-    # Quick +-10 weight sensitivity check in Stage 3
+    # Quick +-10 weight sensitivity check in Stage 3 (including C12 40/15/35/10 consistency tilt)
     weight_configs = [
         ("base_50_15_25_10", (0.50, 0.15, 0.25, 0.10)),
         ("rae_60_10_20_10", (0.60, 0.10, 0.20, 0.10)),
-        ("rae_40_20_30_10", (0.40, 0.20, 0.30, 0.10)),
-        ("con_40_15_35_10", (0.40, 0.15, 0.35, 0.10)),
+        ("C12_con_40_15_35_10", (0.40, 0.15, 0.35, 0.10)),
         ("wpa_45_15_20_20", (0.45, 0.15, 0.20, 0.20)),
     ]
     for cname, wts in weight_configs:
         if cname == "base_50_15_25_10":
             continue
-        tb, _ = build_batting_ratings(clean, weights=wts)
-        tw, _ = build_bowling_ratings(clean, weights=wts)
+        tb, _ = build_batting_ratings(clean, hp_col="is_hp_75", min_hp_balls=180, min_hp_matches=12, recent_cutoff_year=2025, weights=wts)
+        tw, _ = build_bowling_ratings(clean, hp_col="is_hp_75", min_hp_balls=150, min_hp_matches=12, recent_cutoff_year=2025, weights=wts)
         bat_df[f"rank_{cname}"] = bat_df["player_id"].map(tb.set_index("player_id")["rank_eb"])
         bwl_df[f"rank_{cname}"] = bwl_df["player_id"].map(tw.set_index("player_id")["rank_eb"])
 
@@ -645,25 +644,25 @@ def main() -> None:
     fig_dir = Path("outputs/figures")
     fig_dir.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.5))
-    for role, ax, title in [("batter", axes[0], "Batter Eligibility Curve"), ("bowler", axes[1], "Bowler Eligibility Curve")]:
-        sub = elig_scan_df[(elig_scan_df["role"] == role) & (elig_scan_df["min_hp_matches"] == 10)]
-        for rec, lbl, col in [(2022, "All 2022-26", "#718096"), (2025, "Active 2025-26 (Default)", "#2b6cb0")]:
+    for role, ax, title in [("batter", axes[0], "Batter Eligibility Curve (LI >= 75th pct)"), ("bowler", axes[1], "Bowler Eligibility Curve (LI >= 75th pct)")]:
+        sub = elig_scan_df[(elig_scan_df["role"] == role) & (elig_scan_df["min_hp_matches"] == 12)]
+        for rec, lbl, col in [(2022, "All 2022-26", "#718096"), (2025, "Active 2025-26 (C03 Primary)", "#2b6cb0")]:
             s2 = sub[sub["recent_yr"] == rec]
             ax.plot(s2["min_hp_balls"], s2["n_eligible"], "o-", label=lbl, color=col)
-        ax.axvline(120 if role == "batter" else 100, color="#c53030", linestyle="--", label="Autonomous Cutoff")
+        ax.axvline(180 if role == "batter" else 150, color="#c53030", linestyle="--", label="C03 Cutoff (180b / 150b)")
         ax.set_title(title)
-        ax.set_xlabel("Min High-Pressure Balls (>=10 HP Matches)")
+        ax.set_xlabel("Min High-Pressure Balls (>=12 HP Matches)")
         ax.set_ylabel("Eligible Players")
         ax.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(fig_dir / "eligibility_elbow.png", bbox_inches="tight")
     plt.close(fig)
 
-    print("\n--- TOP 15 BATTERS UNDER PRESSURE (Autonomous Default) ---")
+    print("\n--- TOP 15 BATTERS UNDER PRESSURE (C03 Primary: D1=bye1_repaired, LI >= 75th pct) ---")
     cols_b = ["rank_eb", "player_id", "player_name", "hp_matches", "hp_bf", "hp_runs", "hp_sr", "hp_rae100_raw", "hp_rae100_eb", "delta_own_rae100", "pos_match_rate_eb", "hp_wpa100_eb", "composite_z", "hp_ipl_share"]
     print(bat_df[bat_df["eligible"]].head(15)[cols_b].round(3).to_string(index=False))
 
-    print("\n--- TOP 15 BOWLERS UNDER PRESSURE (Autonomous Default) ---")
+    print("\n--- TOP 15 BOWLERS UNDER PRESSURE (C03 Primary: D1=bye1_repaired, LI >= 75th pct) ---")
     cols_w = ["rank_eb", "player_id", "player_name", "primary_pace_spin", "hp_matches", "hp_legal", "hp_wkts", "hp_econ", "hp_total_rsae24_raw", "hp_total_rsae24_eb", "delta_own_rsae24", "pos_match_rate_eb", "hp_wpa24_eb", "composite_z", "hp_ipl_share"]
     print(bwl_df[bwl_df["eligible"]].head(15)[cols_w].round(3).to_string(index=False))
 

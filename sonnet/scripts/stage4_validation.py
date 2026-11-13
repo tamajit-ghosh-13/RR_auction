@@ -21,7 +21,7 @@ def red_team_independent_check(bat_df: pd.DataFrame, bwl_df: pd.DataFrame) -> di
     without importing ANY helper from common.py or stage3_ratings.py."""
     raw = pd.read_csv("data/raw/ball_by_ball.csv", low_memory=False)
     matches = pd.read_csv("data/raw/matches.csv")
-    bp = pd.read_csv("data/interim/ball_pressure.csv.gz", usecols=["match_id", "innings", "overid", "over_ball_num", "innings_ball_num", "is_hp_90"])
+    bp = pd.read_csv("data/interim/ball_pressure.csv.gz", usecols=["match_id", "innings", "overid", "over_ball_num", "innings_ball_num", "is_hp_75"])
 
     # Independent merge & clean filter
     m_dls = set(matches.loc[
@@ -41,7 +41,7 @@ def red_team_independent_check(bat_df: pd.DataFrame, bwl_df: pd.DataFrame) -> di
         raw[c] = raw[c].replace(SPLIT_PLAYER_ID_MAP)
 
     raw = raw.merge(bp, on=["match_id", "innings", "overid", "over_ball_num", "innings_ball_num"], how="inner")
-    hp = raw[raw["is_hp_90"] == 1].copy()
+    hp = raw[raw["is_hp_75"] == 1].copy()
 
     ext = hp["extras_type"].fillna("").str.lower()
     hp["ind_bf"] = ~ext.isin(["wide", "penalty"])
@@ -100,8 +100,8 @@ def match_cluster_bootstrap(
         n_m = len(match_ids)
         m_to_idx = {m: i for i, m in enumerate(match_ids)}
 
-        hp = df_full[df_full["is_hp_90"] == 1].copy()
-        nhp = df_full[df_full["is_hp_90"] == 0].copy()
+        hp = df_full[df_full["is_hp_75"] == 1].copy()
+        nhp = df_full[df_full["is_hp_75"] == 0].copy()
 
         if role == "batter":
             hp = hp[hp["bf"]].copy()
@@ -258,41 +258,44 @@ def main() -> None:
     print("\nTop 15 Bowlers Bootstrap Rank CIs:")
     print(bwl_boot.head(15).merge(bwl_base[["player_id", "player_name"]], on="player_id")[["base_rank", "player_id", "player_name", "boot_rank_mean", "boot_rank_p025", "boot_rank_p975", "p_in_top10_pct", "ci_tier"]].to_string(index=False))
 
-    print("\n=== 3. 10-CHECK MANDATORY ROBUSTNESS SUITE ===")
+    print("\n=== 3. 10-CHECK MANDATORY ROBUSTNESS SUITE (C03 PRIMARY: LI >= 75th pct) ===")
     rob_rows = []
     # Match-ID chronological split (Odd vs Even)
     m_sorted = clean[["match_id", "match_date"]].drop_duplicates().sort_values(["match_date", "match_id"])
     odd_m = set(m_sorted.iloc[0::2]["match_id"])
     even_m = set(m_sorted.iloc[1::2]["match_id"])
-    bat_odd, _ = build_batting_ratings(clean[clean["match_id"].isin(odd_m)], min_hp_balls=60, min_hp_matches=5)
-    bat_evn, _ = build_batting_ratings(clean[clean["match_id"].isin(even_m)], min_hp_balls=60, min_hp_matches=5)
-    bwl_odd, _ = build_bowling_ratings(clean[clean["match_id"].isin(odd_m)], min_hp_balls=50, min_hp_matches=5)
-    bwl_evn, _ = build_bowling_ratings(clean[clean["match_id"].isin(even_m)], min_hp_balls=50, min_hp_matches=5)
+    bat_odd, _ = build_batting_ratings(clean[clean["match_id"].isin(odd_m)], hp_col="is_hp_75", min_hp_balls=81, min_hp_matches=5)
+    bat_evn, _ = build_batting_ratings(clean[clean["match_id"].isin(even_m)], hp_col="is_hp_75", min_hp_balls=81, min_hp_matches=5)
+    bwl_odd, _ = build_bowling_ratings(clean[clean["match_id"].isin(odd_m)], hp_col="is_hp_75", min_hp_balls=67, min_hp_matches=5)
+    bwl_evn, _ = build_bowling_ratings(clean[clean["match_id"].isin(even_m)], hp_col="is_hp_75", min_hp_balls=67, min_hp_matches=5)
     for role, df_a, df_b, lbl in [("batter", bat_odd, bat_evn, "Split-half (Odd vs Even matches)"), ("bowler", bwl_odd, bwl_evn, "Split-half (Odd vs Even matches)")]:
         r = compare_rankings(df_a, df_b, lbl)
         r["role"] = role
         rob_rows.append(r)
 
-    # LI thresholds (75th, 95th), Lens B (Rule), Unadjusted (context only)
-    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 120), ("bowler", build_bowling_ratings, bwl_base, 100)]:
+    # Sensitivity variations relative to C03 primary (LI >= 75th, 180b/150b, 12m, >=2025)
+    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 180), ("bowler", build_bowling_ratings, bwl_base, 150)]:
         for lbl, kw in [
-            ("LI >= 75th pct", {"hp_col": "is_hp_75", "min_hp_balls": int(mb * 1.5), "min_hp_matches": 12}),
-            ("LI >= 95th pct", {"hp_col": "is_hp_95", "min_hp_balls": int(mb * 0.5), "min_hp_matches": 6}),
-            ("Lens B (Rule index)", {"hp_col": "is_hp_rule", "min_hp_balls": int(mb * 0.8), "min_hp_matches": 8}),
+            ("LI >= 90th pct (C01)", {"hp_col": "is_hp_90", "min_hp_balls": 120 if role == "batter" else 100, "min_hp_matches": 10}),
+            ("LI >= 95th pct (C10)", {"hp_col": "is_hp_95", "min_hp_balls": 60 if role == "batter" else 50, "min_hp_matches": 6}),
+            ("Lens B (Rule index, C11)", {"hp_col": "is_hp_rule", "min_hp_balls": 140 if role == "batter" else 120, "min_hp_matches": 10}),
             ("Weights +10% Primary (60/10/20/10)", {"weights": (0.60, 0.10, 0.20, 0.10)}),
-            ("Weights +10% Consist (40/15/35/10)", {"weights": (0.40, 0.15, 0.35, 0.10)}),
+            ("Weights +10% Consist (40/15/35/10, C12)", {"weights": (0.40, 0.15, 0.35, 0.10), "min_hp_balls": 160 if role == "batter" else 140}),
             ("Weights +10% WPA/Disc (45/15/20/20)", {"weights": (0.45, 0.15, 0.20, 0.20)}),
-            ("Cutoff relaxed (80b, 8m)", {"min_hp_balls": 80, "min_hp_matches": 8}),
-            ("Cutoff strict (150b, 12m)", {"min_hp_balls": 150, "min_hp_matches": 12}),
+            ("Cutoff relaxed (140b/120b, 10m)", {"min_hp_balls": 140 if role == "batter" else 120, "min_hp_matches": 10}),
+            ("Cutoff strict (200b/180b, 14m)", {"min_hp_balls": 200 if role == "batter" else 180, "min_hp_matches": 14}),
             ("Cutoff all years (2022-26)", {"recent_cutoff_year": 2022}),
-            ("IPL-only (min 60b, 6m)", {"df_sub": clean[clean["fmt"] == "IPL"], "min_hp_balls": 60, "min_hp_matches": 6}),
+            ("IPL-only (min 80b, 8m)", {"df_sub": clean[clean["fmt"] == "IPL"], "min_hp_balls": 80, "min_hp_matches": 8}),
             ("T20I-only (min 60b, 6m)", {"df_sub": clean[clean["fmt"] == "T20I"], "min_hp_balls": 60, "min_hp_matches": 6}),
-            ("Temporal 2022-24 vs Base", {"df_sub": clean[clean["year"] <= 2024], "min_hp_balls": 60, "min_hp_matches": 6, "recent_cutoff_year": 2022}),
-            ("Temporal 2025-26 vs Base", {"df_sub": clean[clean["year"] >= 2025], "min_hp_balls": 60, "min_hp_matches": 6}),
+            ("Temporal 2022-24 vs Base", {"df_sub": clean[clean["year"] <= 2024], "min_hp_balls": 80, "min_hp_matches": 6, "recent_cutoff_year": 2022}),
+            ("Temporal 2025-26 vs Base", {"df_sub": clean[clean["year"] >= 2025], "min_hp_balls": 80, "min_hp_matches": 6}),
             ("Unadjusted (Context-only vs Opp-Adj)", {"use_opp_adj": False}),
         ]:
             df_in = kw.pop("df_sub", clean)
-            alt_df, _ = fn(df_in, **kw) if "min_hp_balls" in kw else fn(df_in, min_hp_balls=mb, **kw)
+            kw.setdefault("hp_col", "is_hp_75")
+            kw.setdefault("min_hp_balls", mb)
+            kw.setdefault("min_hp_matches", 12)
+            alt_df, _ = fn(df_in, **kw)
             r = compare_rankings(base_df, alt_df, lbl)
             r["role"] = role
             rob_rows.append(r)
@@ -300,7 +303,7 @@ def main() -> None:
         # Leave-one-season-out
         loso_rhos, loso_ovs = [], []
         for yr in [2022, 2023, 2024, 2025, 2026]:
-            alt_yr, _ = fn(clean[clean["year"] != yr], min_hp_balls=int(mb * 0.8), recent_cutoff_year=2024)
+            alt_yr, _ = fn(clean[clean["year"] != yr], hp_col="is_hp_75", min_hp_balls=int(mb * 0.8), min_hp_matches=10, recent_cutoff_year=2024)
             c_yr = compare_rankings(base_df, alt_yr, f"LOSO excl {yr}")
             loso_rhos.append(c_yr["spearman_rho"])
             loso_ovs.append(c_yr["top10_overlap_n"])
@@ -313,25 +316,22 @@ def main() -> None:
             "top10_jaccard": round(float(np.min(loso_ovs) / (20 - np.min(loso_ovs))), 4),
         })
 
-    # Target noise (+-5 runs in Inn2) & Bye 1.5x proxy: compare against target_raw LI (is_hp_90_raw)
-    # Using li_target_raw >= p90 of li_target_raw
-    p90_raw_tgt = clean["li_target_raw"].quantile(0.90)
+    # Target noise (+-5 runs in Inn2) & Bye 1.5x proxy: compare against target_raw LI (is_hp_75_raw)
+    p75_raw_tgt = clean["li_target_raw"].quantile(0.75)
     clean_noise = clean.copy()
-    clean_noise["is_hp_raw_tgt"] = (clean_noise["li_target_raw"] >= p90_raw_tgt).astype(int)
-    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 120), ("bowler", build_bowling_ratings, bwl_base, 100)]:
-        alt_n, _ = fn(clean_noise, hp_col="is_hp_raw_tgt", min_hp_balls=mb)
+    clean_noise["is_hp_raw_tgt"] = (clean_noise["li_target_raw"] >= p75_raw_tgt).astype(int)
+    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 180), ("bowler", build_bowling_ratings, bwl_base, 150)]:
+        alt_n, _ = fn(clean_noise, hp_col="is_hp_raw_tgt", min_hp_balls=mb, min_hp_matches=12)
         r = compare_rankings(base_df, alt_n, "Target-raw (unrepaired target sensitivity)")
         r["role"] = role
         rob_rows.append(r)
 
-    # Exact extras1_runs sensitivity check (comparing raw runs vs build_ball_state runs effect via RRR/target perturbation)
-    # Perturb team_runs / target by +-5 runs -> recompute simple proxy check with target_raw + LI noise sigma=0.05
     rng_n = np.random.default_rng(SEED)
     clean_noise["li_noisy"] = clean_noise["li"] + rng_n.normal(0.0, 0.05, size=len(clean_noise))
-    p90_noisy = clean_noise["li_noisy"].quantile(0.90)
-    clean_noise["is_hp_noisy"] = (clean_noise["li_noisy"] >= p90_noisy).astype(int)
-    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 120), ("bowler", build_bowling_ratings, bwl_base, 100)]:
-        alt_n2, _ = fn(clean_noise, hp_col="is_hp_noisy", min_hp_balls=mb)
+    p75_noisy = clean_noise["li_noisy"].quantile(0.75)
+    clean_noise["is_hp_noisy"] = (clean_noise["li_noisy"] >= p75_noisy).astype(int)
+    for role, fn, base_df, mb in [("batter", build_batting_ratings, bat_base, 180), ("bowler", build_bowling_ratings, bwl_base, 150)]:
+        alt_n2, _ = fn(clean_noise, hp_col="is_hp_noisy", min_hp_balls=mb, min_hp_matches=12)
         r = compare_rankings(base_df, alt_n2, "Target/LI noise sensitivity")
         r["role"] = role
         rob_rows.append(r)
@@ -351,17 +351,34 @@ def main() -> None:
         in_2026 = [int(pid) in map_2026_pids for pid in tdf["player_id"]]
         print(f"  {role} Top-10 in mapping.csv: {sum(in_all)}/10 | in IPL 2026 (comp 3298): {sum(in_2026)}/10")
 
-    # Attach bootstrap columns cleanly & save final_rankings.csv (Top 25 Batters + Top 25 Bowlers)
+    # Compute 5-combo stability count (C01, C03, C04, C11, C12 under D1=bye1_repaired) if bye1_panel exists
+    panel_dir = Path("outputs/bye1_panel")
+    panel_ids = ["C01_bye1_li90_anova", "C03_bye1_li75_anova", "C04_bye1_li75_k100_w15", "C11_bye1_ruleB", "C12_bye1_li75_cons35"]
+    bat_cnt5, bwl_cnt5 = {}, {}
+    for cid in panel_ids:
+        bf, wf = panel_dir / f"{cid}_bat_all.csv", panel_dir / f"{cid}_bowl_all.csv"
+        if bf.exists():
+            bdf = pd.read_csv(bf)
+            for pid in bdf.loc[bdf["eligible"] & (bdf["rank_eb"] <= 10), "player_id"].astype(int):
+                bat_cnt5[pid] = bat_cnt5.get(pid, 0) + 1
+        if wf.exists():
+            wdf = pd.read_csv(wf)
+            for pid in wdf.loc[wdf["eligible"] & (wdf["rank_eb"] <= 10), "player_id"].astype(int):
+                bwl_cnt5[pid] = bwl_cnt5.get(pid, 0) + 1
+
+    # Attach bootstrap columns + 5-combo count cleanly & save final_rankings.csv (Top 25 Batters + Top 25 Bowlers)
     bat_top25 = bat_base[bat_base["eligible"]].head(25).merge(bat_boot, on="player_id", how="left")
+    bat_top25["top10_cnt_of_5"] = [bat_cnt5.get(int(p), np.nan) for p in bat_top25["player_id"]]
     bat_top25["role"] = "Batter"
     bwl_top25 = bwl_base[bwl_base["eligible"]].head(25).merge(bwl_boot, on="player_id", how="left")
+    bwl_top25["top10_cnt_of_5"] = [bwl_cnt5.get(int(p), np.nan) for p in bwl_top25["player_id"]]
     bwl_top25["role"] = "Bowler"
     final_df = pd.concat([bat_top25, bwl_top25], ignore_index=True)
     final_df.to_csv("outputs/final_rankings.csv", index=False)
 
     print("\n=== 5. MATCH-BY-MATCH AUDIT (TOP-10 BEST & WORST HP MATCHES) ===")
-    audit_lines = ["# Match-by-Match Audit of Top-10 Batters & Bowlers\n"]
-    hp_clean = clean[clean["is_hp_90"] == 1].copy()
+    audit_lines = ["# Match-by-Match Audit of Top-10 Batters & Bowlers (C03: LI >= 75th pct)\n"]
+    hp_clean = clean[clean["is_hp_75"] == 1].copy()
     for role, tdf in [("Batter", top10_bat), ("Bowler", top10_bwl)]:
         audit_lines.append(f"## Top 10 {role}s\n")
         for _, r in tdf.iterrows():

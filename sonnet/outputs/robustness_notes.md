@@ -1,31 +1,28 @@
-# Robustness & Stability Notes (`sonnet`)
+# Robustness & Stability Notes (`C03` Primary: `D1 = bye1_repaired`, `LI >= 75th pct`)
 
-Summary of all 10 mandatory stress tests in `outputs/robustness_summary.csv` and `outputs/figures/robustness_rank_ci.png`.
+Summary of all 10 mandatory stress tests in `outputs/robustness_summary.csv` and `outputs/figures/robustness_rank_ci.png`, plus 5-combination confirmation under `D1 = bye1_repaired`.
 
 ## 1. 1,000-Match Cluster Bootstrap Tiers
-Resampling `match_id` with replacement (`B = 1,000`, recomputing shrunk RAE100/RSAE24, own-baseline delta, Beta-Binomial consistency, and WPA/discipline per draw):
+Resampling `match_id` with replacement (`B = 1,000`, recomputing shrunk RAE100/RSAE24, own-baseline delta, Beta-Binomial consistency, and WPA/discipline per draw) across the `C03` eligible pool (`83` batters, `93` bowlers):
 - **Batters**:
-  - *Lock Top 10 (`>=90%`)*: `#1 Rinku Singh` (`97.9%`, 95% rank CI `[1, 10]`), `#3 Abhishek Sharma` (`90.0%`, `[1, 16]`).
-  - *Likely Top 10 (`65-89%`)*: `#2 Yashasvi Jaiswal` (`89.4%`, `[1, 18]`), `#4 Shreyas Iyer` (`76.1%`, `[1, 21]`), `#5 Quinton de Kock` (`66.9%`, `[1, 25]`).
-  - *Borderline (`25-64%`)*: `#6 Suryakumar Yadav` (`52.5%`), `#7 Travis Head` (`54.8%`), `#8 Washington Sundar` (`51.7%`), `#9 Venkatesh Iyer` (`46.6%`), `#10 Sai Sudharsan` (`49.7%`), tightly contested by `#11 David Miller` (`43.2%`), `#12 Tim David` (`44.6%`), `#13 Jos Buttler` (`34.8%`).
+  - *Lock Top 10 (`>=90%`)*: `#1 Vaibhav Sooryavanshi` (`98.0%`, 95% rank CI `[1.0, 9.0]`), `#2 Suryakumar Yadav` (`92.0%`, `[1.0, 15.0]`).
+  - *Likely Top 10 (`65–89%`)*: `#4 Travis Head` (`71.1%`, `[1.0, 38.0]`), `#6 Abhishek Sharma` (`70.0%`, `[2.0, 32.0]`).
+  - *Borderline (`25–64%`)*: `#3 Priyansh Arya` (`64.0%`, `[1.0, 53.0]`), `#8 Jitesh Sharma` (`60.5%`, `[2.0, 37.0]`), `#5 Heinrich Klaasen` (`59.9%`, `[2.0, 36.0]`), `#7 Rinku Singh` (`57.2%`, `[3.0, 27.0]`), `#9 Yashasvi Jaiswal` (`51.7%`, `[2.0, 37.0]`), `#10 Prabhsimran Singh` (`38.4%`, `[3.0, 52.0]`), closely trailed by `#11 Nicholas Pooran` (`28.2%`) and `#12 Josh Inglis` (`25.9%`).
 - **Bowlers**:
-  - *Likely Top 10 (`65-89%`)*: `#1 Josh Hazlewood` (`85.9%`, `[1, 23]`), `#2 Krunal Pandya` (`80.6%`, `[1, 25]`).
-  - *Borderline (`25-64%`)*: `#3 Harshit Rana` (`63.4%`), `#4 Mohammad Nawaz` (`57.9%`), `#6 Varun Chakravarthy` (`46.5%`), `#9 Trent Boult` (`42.5%`), `#8 Sunil Narine` (`39.9%`), `#10 Rashid Khan` (`39.5%`), `#7 Saim Ayub` (`39.1%`), `#5 Yuzvendra Chahal` (`37.8%`), challenged closely by `#11 Mohammed Shami` (`31.4%`), `#12 Kagiso Rabada` (`31.1%`), `#14 Taskin Ahmed` (`36.6%`).
+  - *Likely Top 10 (`65–89%`)*: `#1 Mohammed Shami` (`76.7%`, `[1.0, 28.0]`), `#3 Sunil Narine` (`66.7%`, `[1.0, 37.0]`), `#2 Josh Hazlewood` (`65.5%`, `[1.0, 45.0]`).
+  - *Borderline (`25–64%`)*: `#4 Wanindu Hasaranga` (`64.2%`, `[1.0, 40.0]`), `#5 Lockie Ferguson` (`55.0%`, `[1.0, 52.0]`), `#6 Krunal Pandya` (`43.8%`, `[1.0, 53.0]`), `#8 Varun Chakravarthy` (`33.4%`, `[2.0, 64.0]`), `#7 Harshit Rana` (`31.2%`, `[2.0, 57.0]`), `#10 Rashid Khan` (`30.7%`, `[2.0, 53.0]`), `#9 Trent Boult` (`28.0%`, `[2.0, 58.0]`), with `#11 Patrick Cummins` (`30.4%`) and `#13 Rahul Chahar` (`26.2%`) in the challenger band.
 
 ## 2. Structural Stress Tests (`outputs/robustness_summary.csv`)
 | Check | Batters `rho` (Top-10 Overlap) | Bowlers `rho` (Top-10 Overlap) | Interpretation |
 |---|---:|---:|---|
-| Weight perturbations (`±10%` corners) | `0.987–0.996` (`9–10/10`) | `0.994–0.998` (`10/10`) | Essentially invariant to pillar weights |
-| Unadjusted (Context) vs Opp-Adj Ridge | `0.986` (`9/10`) | `0.990` (`9/10`) | Small rank swaps only |
-| Target/LI ±0.05 noise | `0.956` (`8/10`) | `0.967` (`9/10`) | Stable against boundary target uncertainty |
-| `target_raw` vs repaired target | `0.808` (`5/10`) | `0.867` (`7/10`) | Moderate shift; supports repairing chaser targets |
-| Cutoffs: all years (`2022-26`) vs `2025+` | `0.9996` (`10/10`) | `1.000` (`10/10`) | Within common pool ordering is identical |
-| Cutoffs: relaxed (`80b, 8m`) / strict (`150b`) | `0.999` (`4/10`) / `0.998` (`6/10`) | `0.9998` (`9/10`) / `0.999` (`6/10`) | Admitting 80–115b specialists adds Klaasen/Powell |
-| Leave-One-Season-Out (min across 2022–26) | `0.849` (`5/10`) | `0.834` (`5/10`) | Consistent across seasons |
-| Temporal split (`2022-24` / `2025-26`) | `0.877` (`4/10`) / `0.621` (`5/10`) | `0.787` (`3/10`) / `0.701` (`6/10`) | Natural player aging & role turnover |
-| Format split (`IPL-only` / `T20I-only`) | `0.789` (`3/10`) / `0.800` (`2/10`) | `0.879` (`7/10`) / `0.849` (`2/10`) | Small T20I-only qualifying counts (`n=11, 27`) |
-| `LI >= 75th` / `LI >= 95th` | `0.713` (`5/10`) / `0.333` (`2/10`) | `0.591` (`7/10`) / `0.674` (`5/10`) | `95th pct` leaves <65 balls per player (noisy) |
-| **Odd/Even Match Split-Half** | **`0.294` (`3/10`)** | **`0.010` (`1/10`)** | **Key Variance Warning**: halving the top-10% LI pool drops each player to ~60–90 balls (7–15 overs), where ball-by-ball variance dominates (`k ~ 200` balls). |
-| **Lens B (Rule Index) vs Lens A** | **`0.126` (`1/10`)** | **`0.235` (`2/10`)** | Rule B draws heavily from 1st-innings middle/death overs (`~25%` of dataset), rewarding volume accumulators/defensive death bowlers over 2nd-innings chase specialists. |
-
-**Bottom line on uncertainty**: Point ranks `#1–#5` Batters and `#1–#2` Bowlers are robust; ranks `#6–#15` sit within overlapping bootstrap confidence intervals and should be presented as **Top-10 Tier + Borderline Challengers** rather than deterministic point claims.
+| **Weights +10% Consist (`C12`: `40/15/35/10`)** | **`0.9980` (`10/10`)** | **`0.9957` (`9/10`)** | Statistically tied between `C03` and `C12` consistency tilt |
+| Other weight perturbations (`60/10/20/10`, `45/15/20/20`) | `0.9868–0.9972` (`9/10`) | `0.9927–0.9949` (`9–10/10`) | Essentially invariant to pillar weight tweaks |
+| Unadjusted (Context) vs Opp-Adj Ridge | `0.9802` (`9/10`) | `0.9865` (`10/10`) | Minimal rank swaps from opposition Ridge |
+| Cutoffs: relaxed (`140b/120b, 10m`) / strict (`200b/180b, 14m`) / all years | `0.9996–0.9998` (`9/10`) | `0.9997–1.0000` (`9–10/10`) | Pool stability is invariant across eligibility perturbations |
+| Target/LI ±0.05 noise & `target_raw` | `0.9665–0.9691` (`9/10`) | `0.9075–0.9492` (`7–9/10`) | Stable against chase target noise |
+| Leave-One-Season-Out (min across 2022–26) | `0.8860` (`6/10`) | `0.8744` (`6/10`) | No single season drives the leaderboard |
+| Format split (`IPL-only` / `T20I-only`) | `0.9375` (`7/10`) / `0.7975` (`2/10`) | `0.9218` (`9/10`) / `0.8548` (`3/10`) | Strong IPL alignment (`83–93` pool); smaller T20I-only pool (`n=48, 52`) |
+| Temporal split (`2022-24` / `2025-26`) | `0.8536` (`4/10`) / `0.8404` (`6/10`) | `0.8388` (`5/10`) / `0.5821` (`4/10`) | Natural squad turnover & emergence of 2025–26 stars |
+| `LI >= 90th` (`C01`) / `LI >= 95th` (`C10`) | `0.7133` (`5/10`) / `0.4857` (`1/10`) | `0.5908` (`7/10`) / `0.4663` (`4/10`) | Strict tails leave smaller ball counts |
+| **Odd/Even Match Split-Half** | **`0.2603`** (`n=66`) | **`0.2011`** (`n=84`) | **Both batting & bowling clearly positive** (`SE ~ 0.1` for `n ~ 85`); `LI >= 90th` collapses bowling to `0.0186` and `LI >= 95th` collapses batting to `-0.1353`. |
+| **Lens B (Rule Index, `C11`) vs Lens A** | `0.3983` (`1/10`) | `0.3910` (`2/10`) | Rule B elevates 1st-innings middle/death containment overs rather than chase win-probability swings. |

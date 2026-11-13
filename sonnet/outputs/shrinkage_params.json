@@ -9,32 +9,32 @@
     "opp_bat_runs_eff_std": 0.11009605375811024
   },
   "batting": {
-    "k_balls": 205.95941176440493,
-    "sigma2_within_match": 4064.25021877647,
-    "sigma2_between_match": 223.59054476388565,
-    "prior_mu_rae100": 7.506914307728954,
-    "prior_mu_wpa100": 0.6540219586851427,
-    "prior_mu_nhp_rae100": 7.758465358445477,
-    "prior_mu_pos_match": 0.5334040296924708,
+    "k_balls": 180.87509751118483,
+    "sigma2_within_match": 3489.032543762961,
+    "sigma2_between_match": 247.66811649036956,
+    "prior_mu_rae100": 6.17498511364089,
+    "prior_mu_wpa100": 0.49134046104980345,
+    "prior_mu_nhp_rae100": 6.770608999475297,
+    "prior_mu_pos_match": 0.5045678144764582,
     "pm_winsor_bounds": [
-      -128.59018263519505,
-      206.45469159592707
+      -124.0565490094797,
+      189.47445267991094
     ],
-    "n_eligible": 32
+    "n_eligible": 83
   },
   "bowling": {
-    "k_balls": 199.55882352941177,
-    "sigma2_within_match": 881.4621352792199,
-    "sigma2_between_match": 14.50419948317986,
-    "prior_mu_trsa24": -0.547276495015197,
-    "prior_mu_wpa24": -0.09418236424402063,
-    "prior_mu_disc24": 0.04325551638033294,
-    "prior_mu_nhp_trsa24": -1.0288443182948344,
-    "prior_mu_pos_match": 0.4209621993127148,
+    "k_balls": 242.01098146877143,
+    "sigma2_within_match": 692.4607303055179,
+    "sigma2_between_match": 21.543334815082268,
+    "prior_mu_trsa24": -1.3281881073781105,
+    "prior_mu_wpa24": -0.10052556962377024,
+    "prior_mu_disc24": -0.00735927466769673,
+    "prior_mu_nhp_trsa24": -1.4130374061752482,
+    "prior_mu_pos_match": 0.40732484076433123,
     "pm_winsor_bounds": [
-      -66.60912248536846,
-      100.99257697548028
+      -61.670933278753516,
+      81.99227773735866
     ],
-    "n_eligible": 59
+    "n_eligible": 93
   }
 }
